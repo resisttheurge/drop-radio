@@ -1,4 +1,4 @@
-import nx from '@nx/eslint-plugin';
+import nx from '@nx/eslint-plugin'
 
 export default [
   ...nx.configs['flat/base'],
@@ -22,8 +22,16 @@ export default [
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$'],
           depConstraints: [
             {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
+              sourceTag: 'scope:shared',
+              onlyDependOnLibsWithTags: ['scope:shared'],
+            },
+            {
+              sourceTag: 'scope:server',
+              onlyDependOnLibsWithTags: ['scope:server', 'scope:shared'],
+            },
+            {
+              sourceTag: 'scope:ui',
+              onlyDependOnLibsWithTags: ['scope:ui', 'scope:shared'],
             },
           ],
         },
@@ -44,4 +52,4 @@ export default [
     // Override or add rules here
     rules: {},
   },
-];
+]
