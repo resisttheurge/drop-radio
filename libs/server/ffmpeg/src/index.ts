@@ -1,1 +1,1 @@
-export * from './lib/ffmpeg.js'
+export * from './lib/ffprobe'
