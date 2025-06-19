@@ -80,7 +80,10 @@
   ],
   "targetDefaults": {
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "options": {
+        "coverage": true
+      }
     },
     "@nx/esbuild:esbuild": {
       "cache": true,
