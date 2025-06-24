@@ -13,6 +13,8 @@ export function ffprobeFormat(
   input: string
 ): Promise<FFProbeResult & { format: NonNullable<FFProbeResult['format']> }> {
   return new Promise((resolve, reject) => {
+    let stdOutBuffer = Buffer.from('')
+    let stdErrBuffer = Buffer.from('')
     // spawn a child process to run ffprobe and keep a reference to
     // read from stdout and stderr during event handling
     const probe = spawn('ffprobe', [
@@ -21,6 +23,16 @@ export function ffprobeFormat(
       ...['-of', 'json=c=1'], // format output as JSON in compact mode
       input,
     ])
+
+    // append data to the stdout buffer
+    probe.stdout.on('data', (data: Buffer) => {
+      stdOutBuffer = Buffer.concat([stdOutBuffer, data])
+    })
+
+    // append data to the stderr buffer
+    probe.stderr.on('data', (data: Buffer) => {
+      stdErrBuffer = Buffer.concat([stdErrBuffer, data])
+    })
 
     // listen for node:child_process error events
     // Spawn failed, process can't be killed and others
@@ -39,7 +51,7 @@ export function ffprobeFormat(
           case 0: // code of 0 is a success
             try {
               resolve(
-                JSON.parse(probe.stdout.toString()) as FFProbeResult & {
+                JSON.parse(stdOutBuffer.toString()) as FFProbeResult & {
                   format: NonNullable<FFProbeResult['format']>
                 }
               )
@@ -54,7 +66,7 @@ export function ffprobeFormat(
           default: // any other code is a failure
             reject(
               new FFProbeError(`ffprobe exited with code ${code}`, {
-                cause: probe.stderr.toString(),
+                cause: stdErrBuffer.toString(),
               })
             )
         }

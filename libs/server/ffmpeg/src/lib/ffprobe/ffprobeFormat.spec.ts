@@ -7,24 +7,36 @@ import { ffprobeFormat } from './ffprobeFormat'
 import { FFProbeError } from './FFProbeError'
 import { Arbitrary } from 'fast-check'
 import { FFProbeResult } from './FFProbeResult'
+import { Readable } from 'node:stream'
 
 jest.mock('node:child_process')
 
 describe('ffprobeFormat', () => {
   let mock_child_process: jest.Mocked<typeof child_process>
   let mockProcess: Mock<ChildProcess>
-  let mockStdOut: Mock<Buffer>
-  let mockStdErr: Mock<Buffer>
-  let callbackMap: Map<
+  let mockStdOut: Mock<Readable>
+  let mockStdErr: Mock<Readable>
+  let processCallbackMap: Map<
     Parameters<ChildProcess['on']>[0],
     ((...args: unknown[]) => void)[]
   >
+  let stdOutCallbackMap: Map<
+    Parameters<Readable['on']>[0],
+    ((...args: unknown[]) => void)[]
+  >
+  let stdErrCallbackMap: Map<
+    Parameters<Readable['on']>[0],
+    ((...args: unknown[]) => void)[]
+  >
+
   beforeEach(() => {
     mock_child_process = jest.mocked(child_process)
     mockProcess = mock(ChildProcess)
-    mockStdOut = mock(Buffer)
-    mockStdErr = mock(Buffer)
-    callbackMap = new Map()
+    mockStdOut = mock(Readable)
+    mockStdErr = mock(Readable)
+    processCallbackMap = new Map()
+    stdOutCallbackMap = new Map()
+    stdErrCallbackMap = new Map()
     Object.defineProperty(mockProcess, 'stdout', {
       get: () => mockStdOut,
     })
@@ -33,11 +45,46 @@ describe('ffprobeFormat', () => {
     })
     mock_child_process.spawn.mockReturnValue(mockProcess)
     mockProcess.on.mockImplementation((event, cb) => {
-      callbackMap.set(event, [...(callbackMap.get(event) ?? []), cb])
+      processCallbackMap.set(event, [
+        ...(processCallbackMap.get(event) ?? []),
+        cb,
+      ])
       return mockProcess
     })
     mockProcess.emit.mockImplementation((event, ...args) => {
-      const callbacks = callbackMap.get(event)
+      const callbacks = processCallbackMap.get(event)
+      if (callbacks) {
+        callbacks.forEach((cb) => cb(...args))
+        return true
+      } else {
+        return false
+      }
+    })
+    mockStdOut.on.mockImplementation((event, cb) => {
+      stdOutCallbackMap.set(event, [
+        ...(stdOutCallbackMap.get(event) ?? []),
+        cb,
+      ])
+      return mockStdOut
+    })
+    mockStdOut.emit.mockImplementation((event, ...args) => {
+      const callbacks = stdOutCallbackMap.get(event)
+      if (callbacks) {
+        callbacks.forEach((cb) => cb(...args))
+        return true
+      } else {
+        return false
+      }
+    })
+    mockStdErr.on.mockImplementation((event, cb) => {
+      stdErrCallbackMap.set(event, [
+        ...(stdErrCallbackMap.get(event) ?? []),
+        cb,
+      ])
+      return mockStdErr
+    })
+    mockStdErr.emit.mockImplementation((event, ...args) => {
+      const callbacks = stdErrCallbackMap.get(event)
       if (callbacks) {
         callbacks.forEach((cb) => cb(...args))
         return true
@@ -49,7 +96,9 @@ describe('ffprobeFormat', () => {
 
   afterEach(() => {
     jest.resetAllMocks()
-    callbackMap.clear()
+    processCallbackMap.clear()
+    stdOutCallbackMap.clear()
+    stdErrCallbackMap.clear()
   })
 
   it.prop([fc.string()])(
@@ -73,12 +122,9 @@ describe('ffprobeFormat', () => {
   })(
     'resolves with parsed JSON output on success',
     async ({ input, ffprobeResult }) => {
-      jest
-        .spyOn(mockStdOut, 'toString')
-        .mockReturnValue(JSON.stringify(ffprobeResult))
-
       const resultPromise = ffprobeFormat(input)
 
+      mockStdOut.emit('data', Buffer.from(JSON.stringify(ffprobeResult)))
       mockProcess.emit('close', 0, null)
 
       expect(resultPromise).resolves.toEqual(ffprobeResult)
@@ -114,31 +160,9 @@ describe('ffprobeFormat', () => {
   })(
     'rejects with FFProbeError on non-zero exit code',
     async ({ input, exitCode, stdErrContents }) => {
-      jest.spyOn(mockStdErr, 'toString').mockReturnValue(stdErrContents)
-
       const resultPromise = ffprobeFormat(input)
 
-      mockProcess.emit('close', exitCode, null)
-
-      expect(resultPromise).rejects.toBeInstanceOf(FFProbeError)
-      expect(resultPromise).rejects.toThrow(
-        `ffprobe exited with code ${exitCode}`
-      )
-      expect(resultPromise).rejects.toHaveProperty('cause', stdErrContents)
-    }
-  )
-
-  it.prop({
-    input: fc.string(),
-    exitCode: fc.integer({ min: 1 }),
-    stdErrContents: fc.string(),
-  })(
-    'rejects with FFProbeError on non-zero exit code',
-    async ({ input, exitCode, stdErrContents }) => {
-      jest.spyOn(mockStdErr, 'toString').mockReturnValue(stdErrContents)
-
-      const resultPromise = ffprobeFormat(input)
-
+      mockStdErr.emit('data', Buffer.from(stdErrContents))
       mockProcess.emit('close', exitCode, null)
 
       expect(resultPromise).rejects.toBeInstanceOf(FFProbeError)
