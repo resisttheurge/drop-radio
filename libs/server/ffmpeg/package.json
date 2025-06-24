@@ -35,6 +35,7 @@
     }
   },
   "dependencies": {
-    "@swc/helpers": "^0.5.3"
+    "@swc/helpers": "^0.5.3",
+    "rxjs": "^7.8.2"
   }
 }
