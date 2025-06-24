@@ -11,15 +11,14 @@ import { Readable } from 'node:stream'
 import { TestScheduler } from 'rxjs/testing'
 import { Observable } from 'rxjs'
 import { HLSStreamError } from './HLSStreamError'
-import { stdout } from 'node:process'
 
 jest.mock('node:child_process')
 
 describe('hlsStream', () => {
   let mock_child_process: jest.Mocked<typeof child_process>
   let mockProcess: Mock<ChildProcess>
-  let mockStdOut: Mock<Readable>
-  let mockStdErr: Mock<Readable>
+  let mockStdout: Mock<Readable>
+  let mockStderr: Mock<Readable>
   let processCallbackMap: Map<
     Parameters<ChildProcess['on']>[0],
     ((...args: unknown[]) => void)[]
@@ -38,7 +37,7 @@ describe('hlsStream', () => {
     events: Observable<Buffer>,
     {
       next = (data: Buffer) => {
-        mockStdOut.emit('data', data)
+        mockStdout.emit('data', data)
       },
       error = (error: unknown) => {
         mockProcess.emit('error', error)
@@ -58,16 +57,16 @@ describe('hlsStream', () => {
   function setup() {
     mock_child_process = jest.mocked(child_process)
     mockProcess = mock(ChildProcess)
-    mockStdOut = mock(Readable)
-    mockStdErr = mock(Readable)
+    mockStdout = mock(Readable)
+    mockStderr = mock(Readable)
     processCallbackMap = new Map()
     stdoutCallbackMap = new Map()
     stderrCallbackMap = new Map()
     Object.defineProperty(mockProcess, 'stdout', {
-      get: () => mockStdOut,
+      get: () => mockStdout,
     })
     Object.defineProperty(mockProcess, 'stderr', {
-      get: () => mockStdErr,
+      get: () => mockStderr,
     })
     mock_child_process.spawn.mockReturnValue(mockProcess)
     mockProcess.kill.mockImplementation(jest.fn())
@@ -87,14 +86,14 @@ describe('hlsStream', () => {
         return false
       }
     })
-    mockStdOut.on.mockImplementation((event, cb) => {
+    mockStdout.on.mockImplementation((event, cb) => {
       stdoutCallbackMap.set(event, [
         ...(stdoutCallbackMap.get(event) ?? []),
         cb,
       ])
-      return mockStdOut
+      return mockStdout
     })
-    mockStdOut.emit.mockImplementation((event, ...args) => {
+    mockStdout.emit.mockImplementation((event, ...args) => {
       const callbacks = stdoutCallbackMap.get(event)
       if (callbacks) {
         callbacks.forEach((cb) => cb(...args))
@@ -103,14 +102,14 @@ describe('hlsStream', () => {
         return false
       }
     })
-    mockStdErr.on.mockImplementation((event, cb) => {
+    mockStderr.on.mockImplementation((event, cb) => {
       stderrCallbackMap.set(event, [
         ...(stderrCallbackMap.get(event) ?? []),
         cb,
       ])
-      return mockStdErr
+      return mockStderr
     })
-    mockStdErr.emit.mockImplementation((event, ...args) => {
+    mockStderr.emit.mockImplementation((event, ...args) => {
       const callbacks = stderrCallbackMap.get(event)
       if (callbacks) {
         callbacks.forEach((cb) => cb(...args))
@@ -367,7 +366,7 @@ describe('hlsStream', () => {
         })
         mockProcessEvents(events, {
           complete: () => {
-            mockStdErr.emit('data', Buffer.from(errorMessage)) // Simulate stderr output
+            mockStderr.emit('data', Buffer.from(errorMessage)) // Simulate stderr output
             mockProcess.emit('close', errorCode) // Simulate non-zero exit code
           },
         })

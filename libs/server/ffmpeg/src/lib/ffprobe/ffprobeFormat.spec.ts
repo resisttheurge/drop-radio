@@ -14,17 +14,17 @@ jest.mock('node:child_process')
 describe('ffprobeFormat', () => {
   let mock_child_process: jest.Mocked<typeof child_process>
   let mockProcess: Mock<ChildProcess>
-  let mockStdOut: Mock<Readable>
-  let mockStdErr: Mock<Readable>
+  let mockStdout: Mock<Readable>
+  let mockStderr: Mock<Readable>
   let processCallbackMap: Map<
     Parameters<ChildProcess['on']>[0],
     ((...args: unknown[]) => void)[]
   >
-  let stdOutCallbackMap: Map<
+  let stdoutCallbackMap: Map<
     Parameters<Readable['on']>[0],
     ((...args: unknown[]) => void)[]
   >
-  let stdErrCallbackMap: Map<
+  let stderrCallbackMap: Map<
     Parameters<Readable['on']>[0],
     ((...args: unknown[]) => void)[]
   >
@@ -32,16 +32,16 @@ describe('ffprobeFormat', () => {
   beforeEach(() => {
     mock_child_process = jest.mocked(child_process)
     mockProcess = mock(ChildProcess)
-    mockStdOut = mock(Readable)
-    mockStdErr = mock(Readable)
+    mockStdout = mock(Readable)
+    mockStderr = mock(Readable)
     processCallbackMap = new Map()
-    stdOutCallbackMap = new Map()
-    stdErrCallbackMap = new Map()
+    stdoutCallbackMap = new Map()
+    stderrCallbackMap = new Map()
     Object.defineProperty(mockProcess, 'stdout', {
-      get: () => mockStdOut,
+      get: () => mockStdout,
     })
     Object.defineProperty(mockProcess, 'stderr', {
-      get: () => mockStdErr,
+      get: () => mockStderr,
     })
     mock_child_process.spawn.mockReturnValue(mockProcess)
     mockProcess.on.mockImplementation((event, cb) => {
@@ -60,15 +60,15 @@ describe('ffprobeFormat', () => {
         return false
       }
     })
-    mockStdOut.on.mockImplementation((event, cb) => {
-      stdOutCallbackMap.set(event, [
-        ...(stdOutCallbackMap.get(event) ?? []),
+    mockStdout.on.mockImplementation((event, cb) => {
+      stdoutCallbackMap.set(event, [
+        ...(stdoutCallbackMap.get(event) ?? []),
         cb,
       ])
-      return mockStdOut
+      return mockStdout
     })
-    mockStdOut.emit.mockImplementation((event, ...args) => {
-      const callbacks = stdOutCallbackMap.get(event)
+    mockStdout.emit.mockImplementation((event, ...args) => {
+      const callbacks = stdoutCallbackMap.get(event)
       if (callbacks) {
         callbacks.forEach((cb) => cb(...args))
         return true
@@ -76,15 +76,15 @@ describe('ffprobeFormat', () => {
         return false
       }
     })
-    mockStdErr.on.mockImplementation((event, cb) => {
-      stdErrCallbackMap.set(event, [
-        ...(stdErrCallbackMap.get(event) ?? []),
+    mockStderr.on.mockImplementation((event, cb) => {
+      stderrCallbackMap.set(event, [
+        ...(stderrCallbackMap.get(event) ?? []),
         cb,
       ])
-      return mockStdErr
+      return mockStderr
     })
-    mockStdErr.emit.mockImplementation((event, ...args) => {
-      const callbacks = stdErrCallbackMap.get(event)
+    mockStderr.emit.mockImplementation((event, ...args) => {
+      const callbacks = stderrCallbackMap.get(event)
       if (callbacks) {
         callbacks.forEach((cb) => cb(...args))
         return true
@@ -97,8 +97,8 @@ describe('ffprobeFormat', () => {
   afterEach(() => {
     jest.resetAllMocks()
     processCallbackMap.clear()
-    stdOutCallbackMap.clear()
-    stdErrCallbackMap.clear()
+    stdoutCallbackMap.clear()
+    stderrCallbackMap.clear()
   })
 
   it.prop([fc.string()])(
@@ -124,7 +124,7 @@ describe('ffprobeFormat', () => {
     async ({ input, ffprobeResult }) => {
       const resultPromise = ffprobeFormat(input)
 
-      mockStdOut.emit('data', Buffer.from(JSON.stringify(ffprobeResult)))
+      mockStdout.emit('data', Buffer.from(JSON.stringify(ffprobeResult)))
       mockProcess.emit('close', 0, null)
 
       expect(resultPromise).resolves.toEqual(ffprobeResult)
@@ -156,20 +156,20 @@ describe('ffprobeFormat', () => {
   it.prop({
     input: fc.string(),
     exitCode: fc.integer({ min: 1 }),
-    stdErrContents: fc.string(),
+    stderrContents: fc.string(),
   })(
     'rejects with FFProbeError on non-zero exit code',
-    async ({ input, exitCode, stdErrContents }) => {
+    async ({ input, exitCode, stderrContents }) => {
       const resultPromise = ffprobeFormat(input)
 
-      mockStdErr.emit('data', Buffer.from(stdErrContents))
+      mockStderr.emit('data', Buffer.from(stderrContents))
       mockProcess.emit('close', exitCode, null)
 
       expect(resultPromise).rejects.toBeInstanceOf(FFProbeError)
       expect(resultPromise).rejects.toThrow(
         `ffprobe exited with code ${exitCode}`
       )
-      expect(resultPromise).rejects.toHaveProperty('cause', stdErrContents)
+      expect(resultPromise).rejects.toHaveProperty('cause', stderrContents)
     }
   )
 
