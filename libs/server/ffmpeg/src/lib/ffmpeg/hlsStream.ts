@@ -20,6 +20,7 @@ export function hlsStream(
   const args = toHLSStreamArgs(options)
   return new Observable<HLSStreamProgress>((subscriber) => {
     let processClosed = false
+    let stdErrBuffer = Buffer.from('')
     const ffmpeg = spawn(
       'ffmpeg',
       [
@@ -48,6 +49,10 @@ export function hlsStream(
       ],
       { cwd: outputDirectory }
     )
+
+    ffmpeg.stderr.on('data', (data: Buffer) => {
+      stdErrBuffer = Buffer.concat([stdErrBuffer, data])
+    })
 
     ffmpeg.stdout.on('data', (data: Buffer) => {
       try {
@@ -78,7 +83,7 @@ export function hlsStream(
           default: // any other code is a failure
             subscriber.error(
               new HLSStreamError(`ffmpeg exited with code ${code}`, {
-                cause: ffmpeg.stderr.toString(),
+                cause: stdErrBuffer.toString(),
               })
             )
         }

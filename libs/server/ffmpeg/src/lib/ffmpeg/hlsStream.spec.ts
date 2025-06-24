@@ -11,6 +11,7 @@ import { Readable } from 'node:stream'
 import { TestScheduler } from 'rxjs/testing'
 import { Observable } from 'rxjs'
 import { HLSStreamError } from './HLSStreamError'
+import { stdout } from 'node:process'
 
 jest.mock('node:child_process')
 
@@ -24,6 +25,10 @@ describe('hlsStream', () => {
     ((...args: unknown[]) => void)[]
   >
   let stdoutCallbackMap: Map<
+    Parameters<Readable['on']>[0],
+    ((...args: unknown[]) => void)[]
+  >
+  let stderrCallbackMap: Map<
     Parameters<Readable['on']>[0],
     ((...args: unknown[]) => void)[]
   >
@@ -57,6 +62,7 @@ describe('hlsStream', () => {
     mockStdErr = mock(Readable)
     processCallbackMap = new Map()
     stdoutCallbackMap = new Map()
+    stderrCallbackMap = new Map()
     Object.defineProperty(mockProcess, 'stdout', {
       get: () => mockStdOut,
     })
@@ -97,6 +103,22 @@ describe('hlsStream', () => {
         return false
       }
     })
+    mockStdErr.on.mockImplementation((event, cb) => {
+      stderrCallbackMap.set(event, [
+        ...(stderrCallbackMap.get(event) ?? []),
+        cb,
+      ])
+      return mockStdErr
+    })
+    mockStdErr.emit.mockImplementation((event, ...args) => {
+      const callbacks = stderrCallbackMap.get(event)
+      if (callbacks) {
+        callbacks.forEach((cb) => cb(...args))
+        return true
+      } else {
+        return false
+      }
+    })
     testScheduler = new TestScheduler((actual, expected) => {
       expect(actual).toEqual(expected)
     })
@@ -105,6 +127,8 @@ describe('hlsStream', () => {
   function teardown() {
     jest.resetAllMocks()
     processCallbackMap.clear()
+    stdoutCallbackMap.clear()
+    stderrCallbackMap.clear()
     testScheduler.flush()
   }
 
@@ -325,9 +349,6 @@ describe('hlsStream', () => {
       errorCode,
       errorMessage,
     }) => {
-      Object.assign(mockStdErr, {
-        toString: jest.fn(() => errorMessage),
-      })
       const error = new HLSStreamError(`ffmpeg exited with code ${errorCode}`, {
         cause: errorMessage,
       })
@@ -346,6 +367,7 @@ describe('hlsStream', () => {
         })
         mockProcessEvents(events, {
           complete: () => {
+            mockStdErr.emit('data', Buffer.from(errorMessage)) // Simulate stderr output
             mockProcess.emit('close', errorCode) // Simulate non-zero exit code
           },
         })
