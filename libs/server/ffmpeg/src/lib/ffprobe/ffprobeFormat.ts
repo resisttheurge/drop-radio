@@ -8,15 +8,18 @@ import { FFProbeResult } from './FFProbeResult'
  * @param input The file url to probe
  * @returns A promise that resolves with a ffprobe result containing
  *          format information
+ * @throws {FFProbeError} If ffprobe fails to execute or exits with a non-zero code
  */
 export function ffprobeFormat(
   input: string
 ): Promise<FFProbeResult & { format: NonNullable<FFProbeResult['format']> }> {
   return new Promise((resolve, reject) => {
+    // create buffers to store stdout and stderr data to be used when the
+    // promise is resolved or rejected
     let stdoutBuffer = Buffer.from('')
     let stderrBuffer = Buffer.from('')
-    // spawn a child process to run ffprobe and keep a reference to
-    // read from stdout and stderr during event handling
+
+    // spawn a child process to run ffprobe
     const probe = spawn('ffprobe', [
       '-hide_banner', // hide version and configuration information
       '-show_format', // include format data

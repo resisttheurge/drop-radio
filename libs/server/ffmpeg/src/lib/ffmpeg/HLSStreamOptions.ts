@@ -1,16 +1,70 @@
+/**
+ * Specifies format options for an individual HLS stream
+ */
 export interface HLSStreamFormat {
+  /**
+   * The name of the stream. Can be used in HLS stream segment and playlist
+   * file names.
+   */
   readonly name: string
+
+  /**
+   * The bitrate of the stream, in bits per second (e.g., `128k` or `1.53M`).
+   */
   readonly bitrate: string
+
+  /**
+   * The sample rate of the stream, in Hertz (e.g., `44100` or `44.1k`).
+   */
   readonly sampleRate: string
 }
 
+/**
+ * Options for configuring HLS streaming.
+ */
 export interface HLSStreamOptions {
+  /**
+   * A list of formats to be used for the HLS stream. Each format
+   * corresponds to an individual output stream with the specified name,
+   * bitrate, and sample rate.
+   *
+   * @see {@link HLSSTreamFormat}
+   */
   readonly formats?: HLSStreamFormat[]
+
+  /**
+   * The time in fractional seconds to seek to in the input file when starting
+   * the stream.
+   */
   readonly seekTime?: string
+
+  /**
+   * The duration of each stream segment in seconds. This times the
+   * {@link segmentCount} is the "buffer size" of the HLS stream
+   */
   readonly segmentDuration?: number
+
+  /**
+   * The number of segments to keep in the HLS stream playlist. This times the
+   * {@link segmentDuration} is the "buffer size" of the HLS stream.
+   */
   readonly segmentCount?: number
+
+  /**
+   * The name of the master playlist file. There should be no path prefix or
+   * file extension added
+   */
   readonly masterPlaylistName?: string
+
+  /**
+   * A static suffix to append to each segment file name.
+   */
   readonly segmentFileNameSuffix?: string
+
+  /**
+   * The name of the individual stream playlist file. There should be no path
+   * prefix or file extension added.
+   */
   readonly playlistName?: string
 }
 
