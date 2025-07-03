@@ -2,12 +2,49 @@
  * Represents the output of ffmpeg with the `-progress` option
  */
 export interface HLSStreamProgress {
+  /**
+   * The bitrate of the stream, in bits per second (e.g., `128k` or `1.53M`).
+   * For HLS streams with multiple formats, will be `'N/A'`
+   */
   readonly bitrate: string
+
+  /**
+   * The total size of output in bytes. For HLS streams with multiple formats,
+   * will be `'N/A'`
+   */
   readonly total_size: string
+
+  /**
+   * The time in microseconds that has been output so far
+   */
   readonly out_time_us: string
+
+  /**
+   * The time in microseconds that has been output so far
+   *
+   * @deprecated this field has been moved to {@link out_time_us} and will be
+   *             removed in a future version of ffmpeg
+   * @see {@link https://trac.ffmpeg.org/ticket/7345} and
+   *      {@link https://git.ffmpeg.org/gitweb/ffmpeg.git/commit/26dc76324564fc572689509c2efb7f1cb8f41a45}
+   */
   readonly out_time_ms: string
+
+  /**
+   * The time in the format `HH:MM:SS.mmmmmm` that has been output so far
+   */
   readonly out_time: string
+
+  /**
+   * The speed that stream files are being generated in multiples of "real time"
+   * (e.g., `1x` for real time, `2.34x` for over twice as fast, `0.01x` for very
+   * slow)
+   */
   readonly speed: string
+
+  /**
+   * A string representing whether this progress report is the end or just a
+   * continuation of the stream, i.e., `'continue'` or `'end'`.
+   */
   readonly progress: 'continue' | 'end'
 }
 

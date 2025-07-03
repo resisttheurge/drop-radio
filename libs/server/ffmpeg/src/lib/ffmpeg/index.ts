@@ -1,4 +1,8 @@
 export { hlsStream } from './hlsStream'
 export * from './HLSStreamError'
-export * from './HLSStreamOptions'
-export * from './HLSStreamProgress'
+export {
+  type HLSStreamFormat,
+  type HLSStreamOptions,
+  HLS_STREAM_DEFAULTS,
+} from './HLSStreamOptions'
+export { type HLSStreamProgress } from './HLSStreamProgress'

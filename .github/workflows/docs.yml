@@ -1,0 +1,63 @@
+name: Docs
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  # Build the documentation site. Treated as a check on PRs.
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          filter: tree:0
+          fetch-depth: 0
+
+      # Cache node_modules
+      - name: Setup Node.js and npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      # Install dependencies
+      - name:
+        run: npm ci --legacy-peer-deps
+
+      # Generate documentation with TypeDoc
+      - name: Generate docsite with TypeDoc
+        run: npx nx docs
+
+      # Upload generated docsite as an artifact
+      - name: Upload generated docsite artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: generated-docs/
+
+  # Deploy the documentation site to GitHub Pages. Skipped on PRs.
+  deploy:
+    needs: build
+    if: ${{ !github.event_name == 'pull_request' }}
+
+    # Need elevated permissions to deploy to GitHub Pages
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
