@@ -11,7 +11,6 @@ const config = {
   out: 'generated-docs',
   packageOptions: {
     entryPoints: [
-      'README.md',
       'src/index.ts',
       'src/main.ts',
       'src/main.tsx'
