@@ -6,7 +6,7 @@ Drop Radio is a live, endless, variable-quality multi-stream of the complete rec
 
 ## Would you like to help?
 
-Drop Radio is an [NX](https://nx.dev) monorepo. For proper maintainance, first clone the repository locally and then install its dependencies with `npm`:
+Drop Radio is an [NX](https://nx.dev) monorepo hosted on [GitHub](https://github.com/resisttheurge/drop-radio). For proper maintenance, first clone the repository locally and then install its dependencies with `npm`:
 
 ```shell
 git clone https://github.com/resisttheurge/drop-radio.git
