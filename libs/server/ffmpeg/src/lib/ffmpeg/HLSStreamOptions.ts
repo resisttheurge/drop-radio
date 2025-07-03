@@ -21,54 +21,72 @@ export interface HLSStreamFormat {
 
 /**
  * Options for configuring HLS streaming.
+ * @see {@link HLS_STREAM_DEFAULTS} for default options.
  */
 export interface HLSStreamOptions {
   /**
-   * A list of formats to be used for the HLS stream. Each format
+   * An optional list of formats to be used for the HLS stream. Each format
    * corresponds to an individual output stream with the specified name,
    * bitrate, and sample rate.
    *
-   * @see {@link HLSSTreamFormat}
+   * @see {@link HLSStreamFormat}
    */
   readonly formats?: HLSStreamFormat[]
 
   /**
-   * The time in fractional seconds to seek to in the input file when starting
-   * the stream.
+   * An optional start time of the stream relative to the start of the input
+   * file, in fractional seconds (e.g., `'10'`, or `'5.345'`). Note that
+   * progress events emitted by the resulting Observable will have total time
+   * properties that are relative to this seek time.
    */
   readonly seekTime?: string
 
   /**
-   * The duration of each stream segment in seconds. This times the
+   * An optional duration for each stream segment, in seconds. This times the
    * {@link segmentCount} is the "buffer size" of the HLS stream
    */
   readonly segmentDuration?: number
 
   /**
-   * The number of segments to keep in the HLS stream playlist. This times the
-   * {@link segmentDuration} is the "buffer size" of the HLS stream.
+   * An optional number of segments tracked by the generated playlist files.
+   * Older segment files (over a threshold) will be automatically removed.
+   * This times the {@link segmentDuration} is the "buffer size" of the HLS
+   * stream.
    */
   readonly segmentCount?: number
 
   /**
-   * The name of the master playlist file. There should be no path prefix or
-   * file extension added
+   * An optional name for the playlist file. This file will be at the root of
+   * the output directory, and have the `.m3u8` file extension, so there should
+   * be no path prefix or file extension included in this value.
    */
   readonly masterPlaylistName?: string
 
   /**
-   * A static suffix to append to each segment file name.
+   * An optional suffix for generated segment file names. These files will be in
+   * a sub-directory named after the `format` they belong to, they will be
+   * prefixed by the current date and time in `YYYYMMDD_SSSssssss` format,
+   * and they will have the `.ts` file extension, so there should be no file
+   * extension included in this value.
    */
   readonly segmentFileNameSuffix?: string
 
   /**
-   * The name of the individual stream playlist file. There should be no path
-   * prefix or file extension added.
+   * An optional name for the playlist files generated for each variable-quality
+   * stream. These files will be in a sub-directory named after the `format`
+   * they belong to, and they will have the `.m3u8` file extension, so there
+   * should be no path prefix or file extension added.
    */
   readonly playlistName?: string
 }
 
-export const defaults: Required<HLSStreamOptions> = {
+/**
+ * Default options ({@link HLSStreamOptions}) for HLS streaming.
+ *
+ * {@includeCode HLSStreamOptions.ts#HLS_STREAM_DEFAULTS}
+ */
+// #region HLS_STREAM_DEFAULTS
+export const HLS_STREAM_DEFAULTS: Required<HLSStreamOptions> = {
   formats: [
     { name: '01_highest', bitrate: '1.528M', sampleRate: '96k' },
     { name: '02_high', bitrate: '640k', sampleRate: '48k' },
@@ -83,3 +101,4 @@ export const defaults: Required<HLSStreamOptions> = {
   segmentFileNameSuffix: '',
   playlistName: 'stream',
 }
+// #endregion HLS_STREAM_DEFAULTS

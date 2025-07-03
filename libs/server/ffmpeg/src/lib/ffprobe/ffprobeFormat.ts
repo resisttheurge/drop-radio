@@ -6,9 +6,34 @@ import { FFProbeResult } from './FFProbeResult'
  * Analyzes a file url using ffprobe and returns file format information
  *
  * @param input The file url to probe
- * @returns A promise that resolves with a ffprobe result containing
- *          format information
- * @throws {FFProbeError} If ffprobe fails to execute or exits with a non-zero code
+ * @returns
+ * A promise that resolves with an {@link FFProbeResult} containing format
+ * information, or rejects with an {@link FFProbeError} if `ffprobe` fails to
+ * execute or exits with a non-zero code, or if the output cannot be parsed as
+ * JSON
+ *
+ * @example
+ * ```ts
+ * import { ffprobeFormat } from '@drop-radio/ffmpeg'
+ * //                   or: from '@drop-radio/ffmpeg/ffprobe'
+ *
+ * const info = await ffprobeFormat('/path/to/file.wav')
+ *
+ * expect(info).toEqual({
+ *   format: {
+ *     filename: 'file.wav',
+ *     nb_streams: 1,
+ *     nb_programs: 0,
+ *     nb_stream_groups: 0,
+ *     format_name: 'wav',
+ *     format_long_name: 'WAV / WAVE (Waveform Audio)',
+ *     duration: '169.156646',
+ *     size: '32478120',
+ *     bit_rate: '1536002',
+ *     probe_score: 99,
+ *   },
+ * })
+ * ```
  */
 export function ffprobeFormat(
   input: string

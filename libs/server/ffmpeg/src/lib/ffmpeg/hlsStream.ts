@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process'
 import { Observable } from 'rxjs'
 
 import { HLSStreamError } from './HLSStreamError'
-import { defaults, HLSStreamOptions } from './HLSStreamOptions'
+import { HLS_STREAM_DEFAULTS, HLSStreamOptions } from './HLSStreamOptions'
 import { HLSStreamProgress, parseHLSStreamProgress } from './HLSStreamProgress'
 
 /**
@@ -21,19 +21,36 @@ import { HLSStreamProgress, parseHLSStreamProgress } from './HLSStreamProgress'
  * to subscribe to the same observable multiple times at once, as `ffmpeg` will
  * gladly try to overwrite the same output files at the same time.
  *
- * @param {string} inputFile The input file to stream. Expected to be a media file with
- *                           at least one audio stream
- * @param {string} outputDirectory The directory to output the HLS segments.
- * @param {HLSStreamOptions} [options] Optional HLS stream options.
- * @returns An observable that emits HLS stream progress updates.
+ * @param {string} inputFile
+ * The input file to stream. Expected to be a media file with at least one
+ * audio stream. If this is a relative path, it will be resolved relative to the
+ * current working directory
  *
- * @see {@link https://ffmpeg.org/ffmpeg-formats.html#hls-2} to learn more about
- * HLS streaming with `ffmpeg`.
- * @see {@link defaults} for the default options used if no options are provided.
+ * @param {string} workingDirectory
+ * Optional directory to run `ffmpeg` in and output the resulting HLS files.
+ * Defaults to the current working directory of the parent process
+ *
+ * @param {HLSStreamOptions} [options]
+ * Optional HLS stream options. {@link HLS_STREAM_DEFAULTS} will be used to fill
+ * in any missing options with default values.
+ *
+ * @returns
+ * A cold [rxjs](https://rxjs.dev) Observable which emits
+ * {@link HLSStreamProgress} events as parsed from `ffmpeg`'s output. Because
+ * the observable is cold, it will not start the underlying `ffmpeg` process
+ * until it is subscribed to. Its unsubscribe process checks if the underlying
+ * process is still running, and if so, it sends a `SIGKILL` signal to the
+ * process to terminate it. It will complete when the underlying process exits
+ * with a `0` code, and errors with an {@link HLSStreamError} if the process
+ * fails to start, exits with a non-zero code, or fails to parse a progress
+ * update from the process output
+ *
+ * @see {@link https://ffmpeg.org/ffmpeg-formats.html#hls-2 | The official FFMPEG docs}
+ *      to learn more about HLS streaming with `ffmpeg`.
  */
 export function hlsStream(
   inputFile: string,
-  outputDirectory: string,
+  workingDirectory?: string,
   options?: HLSStreamOptions
 ): Observable<HLSStreamProgress> {
   const args = toHLSStreamArgs(options)
@@ -77,7 +94,7 @@ export function hlsStream(
         ...args.segmentFileName, // set the segment file name pattern
         args.playlistName, // set the variable quality playlist file name pattern
       ],
-      { cwd: outputDirectory } // set working directory to control output location
+      { cwd: workingDirectory } // set working directory to control output location
     )
 
     // append stderr data to the buffer
@@ -261,19 +278,19 @@ export interface HLSStreamArgs {
  * @param {HLSStreamOptions} options HLS stream options.
  * @returns {HLSStreamArgs}  An object containing the ffmpeg arguments for HLS streaming.
  *
- * @see {@link defaults} for the default values used if not specified in the
+ * @see {@link HLS_STREAM_DEFAULTS} for the default values used if not specified in the
  *      `options` parameter.
  * @see {@link HLSStreamOptions} for the options that can be specified.
  * @see {@link HLSStreamArgs} for the resulting ffmpeg arguments.
  */
 export function toHLSStreamArgs({
-  formats = defaults.formats,
-  seekTime = defaults.seekTime,
-  segmentDuration = defaults.segmentDuration,
-  segmentCount = defaults.segmentCount,
-  masterPlaylistName = defaults.masterPlaylistName,
-  segmentFileNameSuffix = defaults.segmentFileNameSuffix,
-  playlistName = defaults.playlistName,
+  formats = HLS_STREAM_DEFAULTS.formats,
+  seekTime = HLS_STREAM_DEFAULTS.seekTime,
+  segmentDuration = HLS_STREAM_DEFAULTS.segmentDuration,
+  segmentCount = HLS_STREAM_DEFAULTS.segmentCount,
+  masterPlaylistName = HLS_STREAM_DEFAULTS.masterPlaylistName,
+  segmentFileNameSuffix = HLS_STREAM_DEFAULTS.segmentFileNameSuffix,
+  playlistName = HLS_STREAM_DEFAULTS.playlistName,
 }: HLSStreamOptions = {}): HLSStreamArgs {
   const result: HLSStreamArgs = {
     seekTime: ['-ss', seekTime],
