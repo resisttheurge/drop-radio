@@ -4,8 +4,12 @@ import { Arbitrary } from 'fast-check'
 import { it, fc } from '@fast-check/jest'
 import { Mock, mock } from 'ts-jest-mocker'
 
-import { hlsStream, toHLSStreamArgs } from './hlsStream'
-import { defaults, HLSStreamFormat, HLSStreamOptions } from './HLSStreamOptions'
+import { hlsStream, HLSStreamArgs, toHLSStreamArgs } from './hlsStream'
+import {
+  HLS_STREAM_DEFAULTS,
+  HLSStreamFormat,
+  HLSStreamOptions,
+} from './HLSStreamOptions'
 import { HLSStreamProgress } from './HLSStreamProgress'
 import { Readable } from 'node:stream'
 import { TestScheduler } from 'rxjs/testing'
@@ -472,29 +476,31 @@ describe('hlsStream', () => {
 
 describe('toHLSStreamArgs', () => {
   it('uses library defaults when no options object is provided', async () => {
-    expect(toHLSStreamArgs()).toEqual(toHLSStreamArgs(defaults))
+    expect(toHLSStreamArgs()).toEqual(toHLSStreamArgs(HLS_STREAM_DEFAULTS))
   })
 
   it('uses library defaults when an empty options object is provided', async () => {
-    expect(toHLSStreamArgs({})).toEqual(toHLSStreamArgs(defaults))
+    expect(toHLSStreamArgs({})).toEqual(toHLSStreamArgs(HLS_STREAM_DEFAULTS))
   })
 
-  for (const key of Object.keys(defaults) as (keyof HLSStreamOptions)[]) {
+  for (const key of Object.keys(
+    HLS_STREAM_DEFAULTS
+  ) as (keyof HLSStreamOptions)[]) {
     it.prop([arbHLSStreamOptions({ [key]: fc.constant(undefined) })])(
       `uses library defaults for ${key} when not provided`,
       async () => {
         const options: Partial<HLSStreamOptions> = { [key]: undefined }
         expect(toHLSStreamArgs(options)).toEqual(
-          toHLSStreamArgs({ ...options, [key]: defaults[key] })
+          toHLSStreamArgs({ ...options, [key]: HLS_STREAM_DEFAULTS[key] })
         )
       }
     )
   }
 })
 
-type ArbitraryConstraints<T> = Partial<{
+type ArbitraryConstraints<T> = {
   [K in keyof T]?: Arbitrary<T[K]>
-}>
+}
 
 function arbHLSStreamFormat({
   name = fc.string(),
