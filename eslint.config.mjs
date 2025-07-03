@@ -1,9 +1,13 @@
 import nx from '@nx/eslint-plugin'
+import tsdoc from 'eslint-plugin-tsdoc'
 
 export default [
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
+  {
+    plugins: { tsdoc },
+  },
   {
     ignores: [
       '**/dist',
@@ -15,6 +19,7 @@ export default [
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     rules: {
+      'tsdoc/syntax': 'warn',
       '@nx/enforce-module-boundaries': [
         'error',
         {

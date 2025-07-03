@@ -117,3 +117,6 @@ test-output
 
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
+
+# Generated documentation output
+/generated-docs
