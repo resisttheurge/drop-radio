@@ -6,25 +6,25 @@ import { FFProbeError } from './FFProbeError'
 describe('FFProbeError', () => {
   it.prop([arbFFProbeError()])(
     'should create an instance with the correct name',
-    async (error) => {
+    (error) => {
       expect(error.name).toBe('FFProbeError')
     }
   )
 
-  it.prop([arbFFProbeError()])('should inherit from Error', async (error) => {
+  it.prop([arbFFProbeError()])('should inherit from Error', (error) => {
     expect(error instanceof Error).toBe(true)
   })
 
   it.prop([arbFFProbeErrorWithMessage()])(
     'should accept a custom message',
-    async ([message, error]) => {
+    ([message, error]) => {
       expect(error.message).toBe(message)
     }
   )
 
   it.prop([arbFFProbeErrorWithOptions()])(
     'should accept options',
-    async ([options, error]) => {
+    ([options, error]) => {
       expect(error.cause).toBe(options.cause)
     }
   )

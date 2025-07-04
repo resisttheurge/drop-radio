@@ -6,25 +6,25 @@ import { HLSStreamError } from './HLSStreamError'
 describe('HLSStreamError', () => {
   it.prop([arbHLSStreamError()])(
     'should create an instance with the correct name',
-    async (error) => {
+    (error) => {
       expect(error.name).toBe('HLSStreamError')
     }
   )
 
-  it.prop([arbHLSStreamError()])('should inherit from Error', async (error) => {
+  it.prop([arbHLSStreamError()])('should inherit from Error', (error) => {
     expect(error instanceof Error).toBe(true)
   })
 
   it.prop([arbHLSStreamErrorWithMessage()])(
     'should accept a custom message',
-    async ([message, error]) => {
+    ([message, error]) => {
       expect(error.message).toBe(message)
     }
   )
 
   it.prop([arbHLSStreamErrorWithOptions()])(
     'should accept options',
-    async ([options, error]) => {
+    ([options, error]) => {
       expect(error.cause).toBe(options.cause)
     }
   )

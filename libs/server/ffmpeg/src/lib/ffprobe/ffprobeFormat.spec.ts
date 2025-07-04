@@ -104,7 +104,7 @@ describe('ffprobeFormat', () => {
   it.prop([fc.string()])(
     'spawns a child process with expected arguments',
     async (input) => {
-      ffprobeFormat(input)
+      const promise = ffprobeFormat(input)
 
       expect(mock_child_process.spawn).toHaveBeenCalledWith('ffprobe', [
         '-hide_banner',
@@ -113,6 +113,11 @@ describe('ffprobeFormat', () => {
         'json=c=1',
         input,
       ])
+
+      // simulate graceful end to the process to resolve the promise
+      mockStdout.emit('data', Buffer.from('{}'))
+      mockProcess.emit('close', 0, null)
+      await promise
     }
   )
 
@@ -127,7 +132,7 @@ describe('ffprobeFormat', () => {
       mockStdout.emit('data', Buffer.from(JSON.stringify(ffprobeResult)))
       mockProcess.emit('close', 0, null)
 
-      expect(resultPromise).resolves.toEqual(ffprobeResult)
+      await expect(resultPromise).resolves.toEqual(ffprobeResult)
     }
   )
 
@@ -145,11 +150,11 @@ describe('ffprobeFormat', () => {
 
       mockProcess.emit('close', 0, null)
 
-      expect(resultPromise).rejects.toBeInstanceOf(FFProbeError)
-      expect(resultPromise).rejects.toThrow(
+      await expect(resultPromise).rejects.toBeInstanceOf(FFProbeError)
+      await expect(resultPromise).rejects.toThrow(
         'Failed to parse ffprobe output as JSON'
       )
-      expect(resultPromise).rejects.toHaveProperty('cause', jsonError)
+      await expect(resultPromise).rejects.toHaveProperty('cause', jsonError)
     }
   )
 
@@ -165,11 +170,14 @@ describe('ffprobeFormat', () => {
       mockStderr.emit('data', Buffer.from(stderrContents))
       mockProcess.emit('close', exitCode, null)
 
-      expect(resultPromise).rejects.toBeInstanceOf(FFProbeError)
-      expect(resultPromise).rejects.toThrow(
+      await expect(resultPromise).rejects.toBeInstanceOf(FFProbeError)
+      await expect(resultPromise).rejects.toThrow(
         `ffprobe exited with code ${exitCode}`
       )
-      expect(resultPromise).rejects.toHaveProperty('cause', stderrContents)
+      await expect(resultPromise).rejects.toHaveProperty(
+        'cause',
+        stderrContents
+      )
     }
   )
 
@@ -183,11 +191,11 @@ describe('ffprobeFormat', () => {
 
       mockProcess.emit('close', null, signal)
 
-      expect(resultPromise).rejects.toBeInstanceOf(FFProbeError)
-      expect(resultPromise).rejects.toThrow(
+      await expect(resultPromise).rejects.toBeInstanceOf(FFProbeError)
+      await expect(resultPromise).rejects.toThrow(
         `ffprobe process was terminated by signal ${signal}`
       )
-      expect(resultPromise).rejects.toHaveProperty('cause', signal)
+      await expect(resultPromise).rejects.toHaveProperty('cause', signal)
     }
   )
 
@@ -199,9 +207,9 @@ describe('ffprobeFormat', () => {
 
     mockProcess.emit('error', error)
 
-    expect(resultPromise).rejects.toBeInstanceOf(FFProbeError)
-    expect(resultPromise).rejects.toThrow('ffprobe child process failed')
-    expect(resultPromise).rejects.toHaveProperty('cause', error)
+    await expect(resultPromise).rejects.toBeInstanceOf(FFProbeError)
+    await expect(resultPromise).rejects.toThrow('ffprobe child process failed')
+    await expect(resultPromise).rejects.toHaveProperty('cause', error)
   })
 })
 
