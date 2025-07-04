@@ -570,7 +570,7 @@ describe('toHLSStreamArgs', () => {
   )
 
   it.prop([arbHLSStreamOptions()])(
-    'produces the correct segment duration arguments',
+    'produces the correct segment count arguments',
     async (options) => {
       const expectedArgs: HLSStreamArgs['segmentCount'] = [
         '-hls_list_size',
