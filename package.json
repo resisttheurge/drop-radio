@@ -92,6 +92,7 @@
   },
   "workspaces": [
     "apps/*",
-    "libs/server/ffmpeg"
+    "libs/server/ffmpeg",
+    "libs/server/stream-plugin"
   ]
 }
