@@ -445,7 +445,7 @@ describe('hlsStream', () => {
     eventStream: arbProgressEvents(),
     err: fc.anything(),
   })(
-    'returns an Observable that errors if it fails to parse ',
+    'returns an Observable that errors if it fails to parse ffmpeg output',
     ({ inputFile, outputDirectory, options, eventStream, err }) => {
       const error = new HLSStreamError('Failed to parse ffmpeg output', {
         cause: err,
