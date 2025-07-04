@@ -147,7 +147,7 @@ describe('hlsStream', () => {
   })(
     'returns a cold Observable that does not spawn a child process if not ' +
       'subscribed',
-    async ({ inputFile, outputDirectory, options }) => {
+    ({ inputFile, outputDirectory, options }) => {
       testScheduler.run(() => {
         hlsStream(inputFile, outputDirectory, options)
         expect(mock_child_process.spawn).not.toHaveBeenCalled()
@@ -162,7 +162,7 @@ describe('hlsStream', () => {
   })(
     'returns a cold Observable that spawns a child process with expected ' +
       'arguments when subscribed',
-    async ({ inputFile, outputDirectory, options }) => {
+    ({ inputFile, outputDirectory, options }) => {
       const args = toHLSStreamArgs(options)
 
       testScheduler.run(() => {
@@ -208,7 +208,7 @@ describe('hlsStream', () => {
     options: fc.option(arbHLSStreamOptions(), { nil: undefined }),
   })(
     'returns an Observable that kills the child process when unsubscribed',
-    async ({ inputFile, outputDirectory, options }) => {
+    ({ inputFile, outputDirectory, options }) => {
       testScheduler.run(() => {
         const process = hlsStream(inputFile, outputDirectory, options)
         const subscription = process.subscribe({ error: console.log })
@@ -227,7 +227,7 @@ describe('hlsStream', () => {
   })(
     'returns an Observable that does not kill the child process when ' +
       'unsubscribed after the process closes',
-    async ({ inputFile, outputDirectory, options, eventStream }) => {
+    ({ inputFile, outputDirectory, options, eventStream }) => {
       testScheduler.run(({ cold, expectObservable, flush }) => {
         const events = cold<Buffer>(
           `${eventStream.marbles}|`,
@@ -254,7 +254,7 @@ describe('hlsStream', () => {
   })(
     'returns an Observable that does not kill the child process when ' +
       'unsubscribed after an error when the process fails',
-    async ({ inputFile, outputDirectory, options, eventStream, err }) => {
+    ({ inputFile, outputDirectory, options, eventStream, err }) => {
       const error = new HLSStreamError('ffmpeg child process failed', {
         cause: err,
       })
@@ -288,7 +288,7 @@ describe('hlsStream', () => {
     eventStream: arbProgressEvents(),
   })(
     'returns an Observable that completes when the process exits with code 0',
-    async ({ inputFile, outputDirectory, options, eventStream }) => {
+    ({ inputFile, outputDirectory, options, eventStream }) => {
       testScheduler.run(({ cold, expectObservable }) => {
         const events = cold<Buffer>(
           `${eventStream.marbles}|`,
@@ -311,7 +311,7 @@ describe('hlsStream', () => {
     err: fc.anything(),
   })(
     'returns an Observable that errors when the process fails',
-    async ({ inputFile, outputDirectory, options, eventStream, err }) => {
+    ({ inputFile, outputDirectory, options, eventStream, err }) => {
       const error = new HLSStreamError('ffmpeg child process failed', {
         cause: err,
       })
@@ -344,7 +344,7 @@ describe('hlsStream', () => {
     errorMessage: fc.string(),
   })(
     'returns an Observable that errors when the process exits with a non-zero code',
-    async ({
+    ({
       inputFile,
       outputDirectory,
       options,
@@ -387,7 +387,7 @@ describe('hlsStream', () => {
     signal: arbTermSig(),
   })(
     'returns an Observable that errors when the process is terminated by a signal',
-    async ({ inputFile, outputDirectory, options, eventStream, signal }) => {
+    ({ inputFile, outputDirectory, options, eventStream, signal }) => {
       const error = new HLSStreamError(
         `ffmpeg process was terminated by signal ${signal}`,
         { cause: signal }
@@ -424,7 +424,7 @@ describe('hlsStream', () => {
   })(
     'returns an Observable that emits HLSStreamProgress objects parsed from ' +
       'stdout',
-    async ({ inputFile, outputDirectory, options, eventStream }) => {
+    ({ inputFile, outputDirectory, options, eventStream }) => {
       testScheduler.run(({ cold, expectObservable }) => {
         const events = cold<Buffer>(
           `${eventStream.marbles}|`,
@@ -446,7 +446,7 @@ describe('hlsStream', () => {
     err: fc.anything(),
   })(
     'returns an Observable that errors if it fails to parse ',
-    async ({ inputFile, outputDirectory, options, eventStream, err }) => {
+    ({ inputFile, outputDirectory, options, eventStream, err }) => {
       const error = new HLSStreamError('Failed to parse ffmpeg output', {
         cause: err,
       })
@@ -475,11 +475,11 @@ describe('hlsStream', () => {
 })
 
 describe('toHLSStreamArgs', () => {
-  it('uses library defaults when no options object is provided', async () => {
+  it('uses library defaults when no options object is provided', () => {
     expect(toHLSStreamArgs()).toEqual(toHLSStreamArgs(HLS_STREAM_DEFAULTS))
   })
 
-  it('uses library defaults when an empty options object is provided', async () => {
+  it('uses library defaults when an empty options object is provided', () => {
     expect(toHLSStreamArgs({})).toEqual(toHLSStreamArgs(HLS_STREAM_DEFAULTS))
   })
 
@@ -488,7 +488,7 @@ describe('toHLSStreamArgs', () => {
   ) as (keyof HLSStreamOptions)[]) {
     it.prop([arbHLSStreamOptions({ [key]: fc.constant(undefined) })])(
       `uses library defaults for ${key} when not provided`,
-      async () => {
+      () => {
         const options: Partial<HLSStreamOptions> = { [key]: undefined }
         expect(toHLSStreamArgs(options)).toEqual(
           toHLSStreamArgs({ ...options, [key]: HLS_STREAM_DEFAULTS[key] })
@@ -499,7 +499,7 @@ describe('toHLSStreamArgs', () => {
 
   it.prop([arbHLSStreamOptions()])(
     'produces the correct seek time arguments',
-    async (options) => {
+    (options) => {
       const expectedArgs: HLSStreamArgs['seekTime'] = [
         '-ss',
         options.seekTime ?? HLS_STREAM_DEFAULTS.seekTime,
@@ -512,7 +512,7 @@ describe('toHLSStreamArgs', () => {
 
   it.prop([arbHLSStreamOptions()])(
     'produces the correct map arguments',
-    async (options) => {
+    (options) => {
       const inputFormats = options.formats ?? HLS_STREAM_DEFAULTS.formats
       const expectedArgs: HLSStreamArgs['maps'] = inputFormats.flatMap(() => [
         '-map',
@@ -527,7 +527,7 @@ describe('toHLSStreamArgs', () => {
 
   it.prop([arbHLSStreamOptions()])(
     'produces the correct sample rate arguments',
-    async (options) => {
+    (options) => {
       const inputFormats = options.formats ?? HLS_STREAM_DEFAULTS.formats
       const expectedArgs: HLSStreamArgs['sampleRates'] = inputFormats.flatMap(
         ({ sampleRate }, index) => [`-ar:a:${index}`, sampleRate]
@@ -541,7 +541,7 @@ describe('toHLSStreamArgs', () => {
 
   it.prop([arbHLSStreamOptions()])(
     'produces the correct bitrate arguments',
-    async (options) => {
+    (options) => {
       const inputFormats = options.formats ?? HLS_STREAM_DEFAULTS.formats
       const expectedArgs: HLSStreamArgs['bitrates'] = inputFormats.flatMap(
         ({ bitrate }, index) => [`-b:a:${index}`, bitrate]
@@ -555,7 +555,7 @@ describe('toHLSStreamArgs', () => {
 
   it.prop([arbHLSStreamOptions()])(
     'produces the correct segment duration arguments',
-    async (options) => {
+    (options) => {
       const expectedArgs: HLSStreamArgs['segmentDuration'] = [
         '-hls_time',
         (
@@ -571,7 +571,7 @@ describe('toHLSStreamArgs', () => {
 
   it.prop([arbHLSStreamOptions()])(
     'produces the correct segment count arguments',
-    async (options) => {
+    (options) => {
       const expectedArgs: HLSStreamArgs['segmentCount'] = [
         '-hls_list_size',
         (options.segmentCount ?? HLS_STREAM_DEFAULTS.segmentCount).toString(),
@@ -585,7 +585,7 @@ describe('toHLSStreamArgs', () => {
 
   it.prop([arbHLSStreamOptions()])(
     'produces the correct variable stream map arguments',
-    async (options) => {
+    (options) => {
       const inputFormats = options.formats ?? HLS_STREAM_DEFAULTS.formats
       const expectedArgs: HLSStreamArgs['varStreamMap'] = [
         '-var_stream_map',
@@ -602,7 +602,7 @@ describe('toHLSStreamArgs', () => {
 
   it.prop([arbHLSStreamOptions()])(
     'produces the correct master playlist name arguments',
-    async (options) => {
+    (options) => {
       const expectedArgs: HLSStreamArgs['masterPlaylistName'] = [
         '-master_pl_name',
         `${
@@ -618,7 +618,7 @@ describe('toHLSStreamArgs', () => {
 
   it.prop([arbHLSStreamOptions()])(
     'produces the correct segment file name arguments',
-    async (options) => {
+    (options) => {
       const expectedArgs: HLSStreamArgs['segmentFileName'] = [
         '-hls_segment_filename',
         `%v/%Y%m%d_%s${
@@ -635,7 +635,7 @@ describe('toHLSStreamArgs', () => {
 
   it.prop([arbHLSStreamOptions()])(
     'produces the correct playlist name arguments',
-    async (options) => {
+    (options) => {
       const expectedArgs: HLSStreamArgs['playlistName'] = `%v/${
         options.playlistName ?? HLS_STREAM_DEFAULTS.playlistName
       }.m3u8`
