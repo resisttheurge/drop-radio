@@ -496,6 +496,155 @@ describe('toHLSStreamArgs', () => {
       }
     )
   }
+
+  it.prop([arbHLSStreamOptions()])(
+    'produces the correct seek time arguments',
+    async (options) => {
+      const expectedArgs: HLSStreamArgs['seekTime'] = [
+        '-ss',
+        options.seekTime ?? HLS_STREAM_DEFAULTS.seekTime,
+      ]
+      const args = toHLSStreamArgs(options)
+
+      expect(args.seekTime).toEqual(expectedArgs)
+    }
+  )
+
+  it.prop([arbHLSStreamOptions()])(
+    'produces the correct map arguments',
+    async (options) => {
+      const inputFormats = options.formats ?? HLS_STREAM_DEFAULTS.formats
+      const expectedArgs: HLSStreamArgs['maps'] = inputFormats.flatMap(() => [
+        '-map',
+        '0:a',
+      ])
+
+      const args = toHLSStreamArgs(options)
+
+      expect(args.maps).toEqual(expectedArgs)
+    }
+  )
+
+  it.prop([arbHLSStreamOptions()])(
+    'produces the correct sample rate arguments',
+    async (options) => {
+      const inputFormats = options.formats ?? HLS_STREAM_DEFAULTS.formats
+      const expectedArgs: HLSStreamArgs['sampleRates'] = inputFormats.flatMap(
+        ({ sampleRate }, index) => [`-ar:a:${index}`, sampleRate]
+      )
+
+      const args = toHLSStreamArgs(options)
+
+      expect(args.sampleRates).toEqual(expectedArgs)
+    }
+  )
+
+  it.prop([arbHLSStreamOptions()])(
+    'produces the correct bitrate arguments',
+    async (options) => {
+      const inputFormats = options.formats ?? HLS_STREAM_DEFAULTS.formats
+      const expectedArgs: HLSStreamArgs['bitrates'] = inputFormats.flatMap(
+        ({ bitrate }, index) => [`-b:a:${index}`, bitrate]
+      )
+
+      const args = toHLSStreamArgs(options)
+
+      expect(args.bitrates).toEqual(expectedArgs)
+    }
+  )
+
+  it.prop([arbHLSStreamOptions()])(
+    'produces the correct segment duration arguments',
+    async (options) => {
+      const expectedArgs: HLSStreamArgs['segmentDuration'] = [
+        '-hls_time',
+        (
+          options.segmentDuration ?? HLS_STREAM_DEFAULTS.segmentDuration
+        ).toString(),
+      ]
+
+      const args = toHLSStreamArgs(options)
+
+      expect(args.segmentDuration).toEqual(expectedArgs)
+    }
+  )
+
+  it.prop([arbHLSStreamOptions()])(
+    'produces the correct segment duration arguments',
+    async (options) => {
+      const expectedArgs: HLSStreamArgs['segmentCount'] = [
+        '-hls_list_size',
+        (options.segmentCount ?? HLS_STREAM_DEFAULTS.segmentCount).toString(),
+      ]
+
+      const args = toHLSStreamArgs(options)
+
+      expect(args.segmentCount).toEqual(expectedArgs)
+    }
+  )
+
+  it.prop([arbHLSStreamOptions()])(
+    'produces the correct variable stream map arguments',
+    async (options) => {
+      const inputFormats = options.formats ?? HLS_STREAM_DEFAULTS.formats
+      const expectedArgs: HLSStreamArgs['varStreamMap'] = [
+        '-var_stream_map',
+        inputFormats
+          .map(({ name }, index) => `a:${index},name:${name}`)
+          .join(' '),
+      ]
+
+      const args = toHLSStreamArgs(options)
+
+      expect(args.varStreamMap).toEqual(expectedArgs)
+    }
+  )
+
+  it.prop([arbHLSStreamOptions()])(
+    'produces the correct master playlist name arguments',
+    async (options) => {
+      const expectedArgs: HLSStreamArgs['masterPlaylistName'] = [
+        '-master_pl_name',
+        `${
+          options.masterPlaylistName ?? HLS_STREAM_DEFAULTS.masterPlaylistName
+        }.m3u8`,
+      ]
+
+      const args = toHLSStreamArgs(options)
+
+      expect(args.masterPlaylistName).toEqual(expectedArgs)
+    }
+  )
+
+  it.prop([arbHLSStreamOptions()])(
+    'produces the correct segment file name arguments',
+    async (options) => {
+      const expectedArgs: HLSStreamArgs['segmentFileName'] = [
+        '-hls_segment_filename',
+        `%v/%Y%m%d_%s${
+          options.segmentFileNameSuffix ??
+          HLS_STREAM_DEFAULTS.segmentFileNameSuffix
+        }.ts`,
+      ]
+
+      const args = toHLSStreamArgs(options)
+
+      expect(args.segmentFileName).toEqual(expectedArgs)
+    }
+  )
+
+  it.prop([arbHLSStreamOptions()])(
+    'produces the correct playlist name arguments',
+    async (options) => {
+      const expectedArgs: HLSStreamArgs['playlistName'] = `%v/${
+        options.playlistName ?? HLS_STREAM_DEFAULTS.playlistName
+      }.m3u8`
+
+      const args = toHLSStreamArgs(options)
+
+      expect(args.playlistName).toEqual(expectedArgs)
+    }
+  )
 })
 
 type ArbitraryConstraints<T> = {
