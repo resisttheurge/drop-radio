@@ -17,4 +17,6 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: 'test-output/jest/coverage',
+  coverageReporters: ['text'],
+  coverageProvider: 'v8',
 }
