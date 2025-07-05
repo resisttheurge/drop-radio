@@ -176,6 +176,8 @@ describe('hlsStream', () => {
             ...['-progress', 'pipe:1'],
             '-re',
             ...args.seekTime,
+            ...args.concat,
+            ...args.loopCount,
             ...['-i', inputFile],
             ...args.maps,
             ...args.sampleRates,
@@ -498,6 +500,32 @@ describe('toHLSStreamArgs', () => {
   }
 
   it.prop([arbHLSStreamOptions()])(
+    'produces the correct concat arguments',
+    (options) => {
+      const expectedArgs: HLSStreamArgs['concat'] = options.concat
+        ? ['-f', 'concat', '-safe', '0']
+        : []
+      const args = toHLSStreamArgs(options)
+
+      expect(args.concat).toEqual(expectedArgs)
+    }
+  )
+
+  it.prop([arbHLSStreamOptions()])(
+    'produces the correct loop arguments',
+    (options) => {
+      const expectedArgs: HLSStreamArgs['loopCount'] = [
+        '-stream_loop',
+        options.loopCount?.toString() ??
+          HLS_STREAM_DEFAULTS.loopCount.toString(),
+      ]
+      const args = toHLSStreamArgs(options)
+
+      expect(args.loopCount).toEqual(expectedArgs)
+    }
+  )
+
+  it.prop([arbHLSStreamOptions()])(
     'produces the correct seek time arguments',
     (options) => {
       const expectedArgs: HLSStreamArgs['seekTime'] = [
@@ -664,6 +692,8 @@ function arbHLSStreamFormat({
 }
 
 function arbHLSStreamOptions({
+  concat = fc.boolean(),
+  loopCount = fc.integer({ min: -1 }),
   formats = fc.array(arbHLSStreamFormat()),
   seekTime = fc.string(),
   segmentDuration = fc.integer({ min: 1 }),
@@ -674,6 +704,8 @@ function arbHLSStreamOptions({
 }: ArbitraryConstraints<HLSStreamOptions> = {}): Arbitrary<HLSStreamOptions> {
   return fc.record(
     {
+      concat,
+      loopCount,
       formats,
       seekTime,
       segmentDuration,
