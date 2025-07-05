@@ -21,7 +21,7 @@ import { HLSStreamProgress, parseHLSStreamProgress } from './HLSStreamProgress'
  * to subscribe to the same observable multiple times at once, as `ffmpeg` will
  * gladly try to overwrite the same output files at the same time. In many cases,
  * use of the {@link HLSStreamOptions.concat} option is better suited for playlist
- * functionality, and {@link HLSStreamOptions.loops} for replay / looping.
+ * functionality, and {@link HLSStreamOptions.loopCount} for replay / looping.
  *
  * **Note**: `ffmpeg` HLS streaming will always leave behind the last playlist
  * and segment files it created when the process exits. If the same playlist
