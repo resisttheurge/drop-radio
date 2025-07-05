@@ -25,6 +25,19 @@ export interface HLSStreamFormat {
  */
 export interface HLSStreamOptions {
   /**
+   * An optional flag to indicate whether to expect the input to be a plain text
+   * file with a list of files to concatenate.
+   */
+  readonly concat?: boolean
+
+  /**
+   * An optional number of times to loop the input. If set to `-1`, the
+   * input will be looped indefinitely. If set to `0`, the input will be played
+   * once, and if set to `1`, it will be played twice, etc.
+   */
+  readonly loops?: number
+
+  /**
    * An optional list of formats to be used for the HLS stream. Each format
    * corresponds to an individual output stream with the specified name,
    * bitrate, and sample rate.
@@ -87,6 +100,8 @@ export interface HLSStreamOptions {
  */
 // #region HLS_STREAM_DEFAULTS
 export const HLS_STREAM_DEFAULTS: Required<HLSStreamOptions> = {
+  concat: false,
+  loops: 0,
   formats: [
     { name: '01_highest', bitrate: '1.528M', sampleRate: '96k' },
     { name: '02_high', bitrate: '640k', sampleRate: '48k' },

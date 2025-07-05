@@ -19,12 +19,25 @@ import { HLSStreamProgress, parseHLSStreamProgress } from './HLSStreamProgress'
  * "playlist" functionality, where a series of these observables can be
  * constructed and arranged before running them, but care must be exercised not
  * to subscribe to the same observable multiple times at once, as `ffmpeg` will
- * gladly try to overwrite the same output files at the same time.
+ * gladly try to overwrite the same output files at the same time. In many cases,
+ * use of the {@link HLSStreamOptions.concat} option is better suited for playlist
+ * functionality, and {@link HLSStreamOptions.loops} for replay / looping.
+ *
+ * **Note**: `ffmpeg` HLS streaming will always leave behind the last playlist
+ * and segment files it created when the process exits. If the same playlist
+ * file names and locations are used on a subsequent run, `ffmpeg` will append
+ * to the existing playlist files, and preserve the tail of the old segments
+ * until they are removed from the playlist, after which they will be deleted.
+ * However, any existing segments files that are not referenced by the existing
+ * playlist when the new `ffmpeg` process starts will be ignored, and require
+ * manual deletion if they are no longer needed. There is always at least one
+ * dangling segment file left behind by each `ffmpeg` process.
  *
  * @param {string} inputFile
  * The input file to stream. Expected to be a media file with at least one
- * audio stream. If this is a relative path, it will be resolved relative to the
- * current working directory
+ * audio stream, or, if `options.concat` is true, an [`ffconcat` playlist file]() for
+ * playing
+ * If this is a relative path, it will be resolved relative to the current working directory
  *
  * @param {string} workingDirectory
  * Optional directory to run `ffmpeg` in and output the resulting HLS files.
@@ -72,6 +85,8 @@ export function hlsStream(
         ...['-progress', 'pipe:1'], // send progress updates to stdout to be read
         '-re', // read input in "real-time" to keep stream files "live"
         ...args.seekTime, // seek to the specified time before starting the stream
+        ...args.concat, // concat input files if specified
+        ...args.loop, // loop the input file as specified
         ...['-i', inputFile], // input file to stream
         ...args.maps, // map audio streams to output (multiplex for variable quality streams)
         ...args.sampleRates, // set sample rate for each output audio stream
@@ -176,6 +191,26 @@ export function hlsStream(
  *      information on HLS-specific arguments
  */
 export interface HLSStreamArgs {
+  /**
+   * The list of arguments to pass to `ffmpeg` to optionally treat the input file
+   * as a plaintext `ffconcat` playlist file with a list of files to concatenate
+   * into a single stream. If the {@link HLSStreamOptions.concat} option is set to
+   * `true`, this will be `['-f', 'concat', '-safe', '0']`, otherwise it will be
+   * an empty array.
+   *
+   * @see {@link https://ffmpeg.org/ffmpeg-formats.html#concat-1 | the ffmpeg concat docs}
+   * for playlist file format and usage
+   */
+  concat: string[]
+
+  /**
+   * The number of times to loop the input file. This will be a pair of arguments
+   * `'-stream_loop', loops` where `loops` is the number of loops to perform.
+   * If loops is `-1`, the input will loop indefinitely. If it's `0`, the input
+   * will play once, and if it's `1`, it will play twice, etc.
+   */
+  loop: ['-stream_loop', string]
+
   /**
    * The time to seek to before starting the stream, in fractional seconds.
    */
@@ -284,6 +319,8 @@ export interface HLSStreamArgs {
  * @see {@link HLSStreamArgs} for the resulting ffmpeg arguments.
  */
 export function toHLSStreamArgs({
+  concat = HLS_STREAM_DEFAULTS.concat,
+  loops = HLS_STREAM_DEFAULTS.loops,
   formats = HLS_STREAM_DEFAULTS.formats,
   seekTime = HLS_STREAM_DEFAULTS.seekTime,
   segmentDuration = HLS_STREAM_DEFAULTS.segmentDuration,
@@ -293,6 +330,8 @@ export function toHLSStreamArgs({
   playlistName = HLS_STREAM_DEFAULTS.playlistName,
 }: HLSStreamOptions = {}): HLSStreamArgs {
   const result: HLSStreamArgs = {
+    concat: concat ? ['-f', 'concat', '-safe', '0'] : [],
+    loop: ['-stream_loop', loops.toString()],
     seekTime: ['-ss', seekTime],
     maps: [],
     sampleRates: [],
