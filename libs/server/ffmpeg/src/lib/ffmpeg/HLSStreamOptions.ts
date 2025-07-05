@@ -35,7 +35,7 @@ export interface HLSStreamOptions {
    * input will be looped indefinitely. If set to `0`, the input will be played
    * once, and if set to `1`, it will be played twice, etc.
    */
-  readonly loops?: number
+  readonly loopCount?: number
 
   /**
    * An optional list of formats to be used for the HLS stream. Each format
@@ -101,7 +101,7 @@ export interface HLSStreamOptions {
 // #region HLS_STREAM_DEFAULTS
 export const HLS_STREAM_DEFAULTS: Required<HLSStreamOptions> = {
   concat: false,
-  loops: 0,
+  loopCount: 0,
   formats: [
     { name: '01_highest', bitrate: '1.528M', sampleRate: '96k' },
     { name: '02_high', bitrate: '640k', sampleRate: '48k' },

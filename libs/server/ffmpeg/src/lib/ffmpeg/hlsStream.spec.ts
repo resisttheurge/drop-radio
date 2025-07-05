@@ -177,7 +177,7 @@ describe('hlsStream', () => {
             '-re',
             ...args.seekTime,
             ...args.concat,
-            ...args.loop,
+            ...args.loopCount,
             ...['-i', inputFile],
             ...args.maps,
             ...args.sampleRates,
@@ -514,13 +514,14 @@ describe('toHLSStreamArgs', () => {
   it.prop([arbHLSStreamOptions()])(
     'produces the correct loop arguments',
     (options) => {
-      const expectedArgs: HLSStreamArgs['loop'] = [
+      const expectedArgs: HLSStreamArgs['loopCount'] = [
         '-stream_loop',
-        options.loops?.toString() ?? HLS_STREAM_DEFAULTS.loops.toString(),
+        options.loopCount?.toString() ??
+          HLS_STREAM_DEFAULTS.loopCount.toString(),
       ]
       const args = toHLSStreamArgs(options)
 
-      expect(args.loop).toEqual(expectedArgs)
+      expect(args.loopCount).toEqual(expectedArgs)
     }
   )
 
@@ -692,7 +693,7 @@ function arbHLSStreamFormat({
 
 function arbHLSStreamOptions({
   concat = fc.boolean(),
-  loops = fc.integer({ min: -1 }),
+  loopCount = fc.integer({ min: -1 }),
   formats = fc.array(arbHLSStreamFormat()),
   seekTime = fc.string(),
   segmentDuration = fc.integer({ min: 1 }),
@@ -704,7 +705,7 @@ function arbHLSStreamOptions({
   return fc.record(
     {
       concat,
-      loops,
+      loopCount,
       formats,
       seekTime,
       segmentDuration,

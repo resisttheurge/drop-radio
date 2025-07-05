@@ -35,9 +35,10 @@ import { HLSStreamProgress, parseHLSStreamProgress } from './HLSStreamProgress'
  *
  * @param {string} inputFile
  * The input file to stream. Expected to be a media file with at least one
- * audio stream, or, if `options.concat` is true, an [`ffconcat` playlist file]() for
- * playing
- * If this is a relative path, it will be resolved relative to the current working directory
+ * audio stream, or, if `options.concat` is true, an
+ * [`ffconcat` playlist file](https://ffmpeg.org/ffmpeg-formats.html#Syntax) to
+ * play back multiple files in succession. If this is a relative path, it will
+ * be resolved relative to the current working directory
  *
  * @param {string} workingDirectory
  * Optional directory to run `ffmpeg` in and output the resulting HLS files.
@@ -86,7 +87,7 @@ export function hlsStream(
         '-re', // read input in "real-time" to keep stream files "live"
         ...args.seekTime, // seek to the specified time before starting the stream
         ...args.concat, // concat input files if specified
-        ...args.loop, // loop the input file as specified
+        ...args.loopCount, // loop the input file as specified
         ...['-i', inputFile], // input file to stream
         ...args.maps, // map audio streams to output (multiplex for variable quality streams)
         ...args.sampleRates, // set sample rate for each output audio stream
@@ -209,7 +210,7 @@ export interface HLSStreamArgs {
    * If loops is `-1`, the input will loop indefinitely. If it's `0`, the input
    * will play once, and if it's `1`, it will play twice, etc.
    */
-  loop: ['-stream_loop', string]
+  loopCount: ['-stream_loop', string]
 
   /**
    * The time to seek to before starting the stream, in fractional seconds.
@@ -320,7 +321,7 @@ export interface HLSStreamArgs {
  */
 export function toHLSStreamArgs({
   concat = HLS_STREAM_DEFAULTS.concat,
-  loops = HLS_STREAM_DEFAULTS.loops,
+  loopCount = HLS_STREAM_DEFAULTS.loopCount,
   formats = HLS_STREAM_DEFAULTS.formats,
   seekTime = HLS_STREAM_DEFAULTS.seekTime,
   segmentDuration = HLS_STREAM_DEFAULTS.segmentDuration,
@@ -331,7 +332,7 @@ export function toHLSStreamArgs({
 }: HLSStreamOptions = {}): HLSStreamArgs {
   const result: HLSStreamArgs = {
     concat: concat ? ['-f', 'concat', '-safe', '0'] : [],
-    loop: ['-stream_loop', loops.toString()],
+    loopCount: ['-stream_loop', loopCount.toString()],
     seekTime: ['-ss', seekTime],
     maps: [],
     sampleRates: [],
