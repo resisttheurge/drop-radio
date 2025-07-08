@@ -6,7 +6,21 @@
     "docs": "typedoc --options typedoc.config.mjs"
   },
   "private": true,
-  "nx": {},
+  "nx": {
+    "implicitDependencies": [
+      "*"
+    ],
+    "targets": {
+      "docs": {
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "{workspaceRoot}/generated-docs"
+        ]
+      }
+    }
+  },
   "dependencies": {
     "@fastify/autoload": "~6.0.3",
     "@fastify/sensible": "~6.0.2",
