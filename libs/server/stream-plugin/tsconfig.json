@@ -4,6 +4,9 @@
   "include": [],
   "references": [
     {
+      "path": "../ffmpeg"
+    },
+    {
       "path": "./tsconfig.lib.json"
     },
     {

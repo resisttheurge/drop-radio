@@ -21,7 +21,7 @@
   ],
   "references": [
     {
-      "path": "../../libs/server/ffmpeg/tsconfig.lib.json"
+      "path": "../../libs/server/stream-plugin/tsconfig.lib.json"
     }
   ]
 }
