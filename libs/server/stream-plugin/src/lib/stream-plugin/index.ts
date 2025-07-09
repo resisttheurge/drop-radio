@@ -56,8 +56,7 @@ const streamPlugin: FastifyPluginAsync<StreamOptions> = async (
   fastify.decorate('stream', {
     playlist,
     inputDirectory: absInDir,
-    outputDirectory,
-    absOutDir,
+    outputDirectory: absOutDir,
     metaPlaylistFile: absMetaPlaylistFile,
     playlistFile: absPlaylistFile,
     progress: new Subject<Progress>(),
