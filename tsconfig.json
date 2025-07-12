@@ -17,6 +17,9 @@
     },
     {
       "path": "./libs/server/ffmpeg"
+    },
+    {
+      "path": "./libs/server/stream-plugin"
     }
   ]
 }

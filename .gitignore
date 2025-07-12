@@ -120,3 +120,12 @@ vitest.config.*.timestamp*
 
 # Generated documentation output
 /generated-docs
+
+# Local environment files
+*.local.env
+
+# Local audio input directory
+/server-audio-files
+
+# Local stream output directory
+/server-stream-files
