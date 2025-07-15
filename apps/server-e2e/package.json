@@ -10,6 +10,13 @@
       "@drop-radio/server"
     ],
     "targets": {
+      "docker-run": {
+        "command": "docker run --mount type=bind,src=$(pwd)/{projectRoot}/test-server-audio-files,dst=/drop-radio/server/input -p 3000:3000 -t drop-radio-server",
+        "continuous": true,
+        "dependsOn": [
+          "@drop-radio/server:docker-build"
+        ]
+      },
       "e2e": {
         "executor": "@nx/jest:jest",
         "outputs": [
@@ -20,8 +27,7 @@
           "passWithNoTests": true
         },
         "dependsOn": [
-          "@drop-radio/server:build",
-          "@drop-radio/server:serve"
+          "docker-run"
         ]
       }
     }

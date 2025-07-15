@@ -4,18 +4,18 @@ import staticPlugin from '@fastify/static'
 import { Temporal } from '@js-temporal/polyfill'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
-import { Subject, Subscription, timer } from 'rxjs'
+import { filter, firstValueFrom, Subject, Subscription, timer } from 'rxjs'
 
 import { hlsStream } from '@drop-radio/ffmpeg'
 
-import { convertPlaylistProgress } from './convertPlaylistProgress'
+import startInstantPlugin from '../start-instant-plugin'
 import { cleanupStreamFiles } from './cleanupStreamFiles'
+import { convertPlaylistProgress } from './convertPlaylistProgress'
+import { createMetaPlaylistFile } from './createMetaPlaylistFile'
+import { Playlist } from './Playlist'
 import { Progress } from './Progress'
 import { readPlaylistFromDirectory } from './readPlaylistFromDir'
-import startInstantPlugin from '../start-instant-plugin'
-import { Playlist } from './Playlist'
 import { writePlaylistToFile } from './writePlaylistToFile'
-import { createMetaPlaylistFile } from './createMetaPlaylistFile'
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -100,6 +100,11 @@ const streamPlugin: FastifyPluginAsync<StreamOptions> = async (
   await cleanupStreamFiles(fastify.stream.outputDirectory)
   await createMetaPlaylistFile(absMetaPlaylistFile, absPlaylistFile)
 
+  fastify.get('/progress', async (request, reply) => {
+    const progress = await firstValueFrom(fastify.stream.progress)
+    reply.send(progress)
+  })
+
   fastify.register(staticPlugin, {
     root: fastify.stream.outputDirectory,
     prefix: '/stream/',
@@ -135,7 +140,10 @@ const streamPlugin: FastifyPluginAsync<StreamOptions> = async (
         segmentCount: 4,
       }
     )
-      .pipe(convertPlaylistProgress(fastify.stream.playlist, seekTime))
+      .pipe(
+        filter(({ out_time_us }) => out_time_us !== 'N/A'),
+        convertPlaylistProgress(fastify.stream.playlist, seekTime)
+      )
       .subscribe(fastify.stream.progress)
   })
 
