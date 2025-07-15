@@ -135,7 +135,10 @@ const streamPlugin: FastifyPluginAsync<StreamOptions> = async (
         segmentCount: 4,
       }
     )
-      .pipe(convertPlaylistProgress(fastify.stream.playlist, seekTime))
+      .pipe(
+        filter(({ out_time_us }) => out_time_us !== 'N/A'),
+        convertPlaylistProgress(fastify.stream.playlist, seekTime)
+      )
       .subscribe(fastify.stream.progress)
   })
 
