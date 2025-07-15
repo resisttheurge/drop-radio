@@ -5,10 +5,10 @@ import { app } from './app/app'
 
 const host = process.env.HOST ?? 'localhost'
 const port = process.env.PORT ? Number(process.env.PORT) : 3000
+const isProduction = process.env.NODE_ENV === 'production'
 
-// Instantiate Fastify with some config
-const server = Fastify({
-  logger: {
+const envToLogger = {
+  development: {
     transport: {
       target: 'pino-pretty',
       options: {
@@ -17,6 +17,12 @@ const server = Fastify({
       },
     },
   },
+  production: true,
+}
+
+// Instantiate Fastify with some config
+const server = Fastify({
+  logger: envToLogger[isProduction ? 'production' : 'development'],
 })
 // Register your application as a normal plugin.
 server.register(app)
