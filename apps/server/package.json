@@ -19,7 +19,6 @@
           "format": [
             "cjs"
           ],
-          "bundle": false,
           "main": "apps/server/src/main.ts",
           "tsConfig": "apps/server/tsconfig.app.json",
           "assets": [
@@ -35,6 +34,8 @@
         "configurations": {
           "development": {},
           "production": {
+            "bundle": true,
+            "thirdParty": true,
             "esbuildOptions": {
               "sourcemap": false,
               "outExtension": {
@@ -68,6 +69,19 @@
         "options": {
           "passWithNoTests": true
         }
+      },
+      "docker-build": {
+        "command": "docker build apps/server/ -t drop-radio-server",
+        "dependsOn": [
+          "build"
+        ]
+      },
+      "docker-run": {
+        "command": "docker run --mount type=bind,src={args.inputDir},dst=/drop-radio/server/input -p 3000:3000 -t drop-radio-server",
+        "continuous": true,
+        "dependsOn": [
+          "docker-build"
+        ]
       }
     }
   }
