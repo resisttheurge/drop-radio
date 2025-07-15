@@ -4,7 +4,7 @@ import staticPlugin from '@fastify/static'
 import { Temporal } from '@js-temporal/polyfill'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
-import { filter, Subject, Subscription, take, tap, timer } from 'rxjs'
+import { filter, firstValueFrom, Subject, Subscription, take, tap, timer } from 'rxjs'
 
 import { hlsStream } from '@drop-radio/ffmpeg'
 
@@ -101,12 +101,8 @@ const streamPlugin: FastifyPluginAsync<StreamOptions> = async (
   await createMetaPlaylistFile(absMetaPlaylistFile, absPlaylistFile)
 
   fastify.get('/progress', async (request, reply) => {
-    fastify.stream.progress.pipe(
-      take(1),
-      tap((progress) => {
-        reply.send(progress)
-      })
-    )
+    const progress = await firstValueFrom(fastify.stream.progress)
+    reply.send(progress)
   })
   
   fastify.register(staticPlugin, {
