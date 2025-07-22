@@ -40,7 +40,7 @@ jobs:
         id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
-          path: generated-docs/
+          path: assets/generated-docs/
 
   # Deploy the documentation site to GitHub Pages. Skipped on PRs.
   deploy:

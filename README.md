@@ -23,6 +23,29 @@ npx nx affected -t lint test build e2e -c test # lint, test, build, and run e2e 
 npx nx docs # generate the docsite
 ```
 
+## Here's what you can do right now
+
+## Run the stream server
+
+To run the server locally, add an `.local.env` file to the `apps/server` folder with some details:
+
+```
+FILE_EXTENSION=mp3
+INPUT_DIRECTORY=assets/drop-audio/
+OUTPUT_DIRECTORY=assets/drop-stream/
+NODE_ENV=development
+```
+
+Then, add some audio files to the `assets/drop-audio` directory. These should all be the same format. If they are not `mp3` files, update the configuration above.
+
+Finally, run:
+
+```shell
+npx nx serve server
+```
+
+This will start a server that streams the audio files in `assets/drop-audio` on port `3000`. If you have a streaming media player like [VLC](https://www.videolan.org/vlc/), you can open the the following network location and listen along: `http://localhost:3000/stream/00_stream.m3u8`
+
 ## You might need a few things
 
 To run those commands above, you will need to install [`git`](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [`node`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) if you haven't already.
