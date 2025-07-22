@@ -86,7 +86,7 @@ jobs:
             --zone=${{ vars.compute_zone }} \
             --metadata=startup-script='#!/bin/bash
               docker pull gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
-              docker run --rm gcr.io/google.com/cloudsdktool/google-cloud-cli:slim gcloud storage rsync -r gs://${{ vars.audio_bucket }} /var/drop-radio-server/input --delete-unmatched-destination-objects
+              docker run --rm -v /var/drop-radio-server/input:/rsync-output gcr.io/google.com/cloudsdktool/google-cloud-cli:slim gcloud storage rsync -r gs://${{ vars.audio_bucket }} /rsync-output --delete-unmatched-destination-objects
             '
 
       - name: Update Google Compute Engine instance
