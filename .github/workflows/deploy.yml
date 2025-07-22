@@ -91,5 +91,6 @@ jobs:
       - name: Update Google Compute Engine instance
         run: |
           gcloud compute instances update-container ${{ vars.instance_name }} \
+          --zone ${{ vars.compute_zone }} \
           --container-image ghcr.io/resisttheurge/drop-radio-server:latest \
           --container-mount-host-path mount-path=/app/input,host-path=/opt/drop-radio-server/input,mode=ro
