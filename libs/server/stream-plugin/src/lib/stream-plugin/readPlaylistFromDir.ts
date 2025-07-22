@@ -10,14 +10,15 @@ export async function readPlaylistFromDirectory(
   fileExtension = 'wav'
 ): Promise<Playlist> {
   const entries = [] as PlaylistEntry[]
+  const fileExtensionRegExp = new RegExp(`.${fileExtension}$`)
   for await (const file of fs.glob(`**/*.${fileExtension}`, {
     cwd: directory,
   })) {
     const path = resolve(directory, file)
     const { format } = await ffprobeFormat(path)
     entries.push({
-      title: format.filename.replace(new RegExp(`.${fileExtension}$`), ''),
-      filename: format.filename,
+      title: file.replace(fileExtensionRegExp, ''),
+      filename: file,
       duration: Number.parseInt(format.duration.replace('.', '')),
       filepath: path,
     })
