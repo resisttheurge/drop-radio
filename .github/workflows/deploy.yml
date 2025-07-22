@@ -85,7 +85,7 @@ jobs:
           gcloud compute instances add-metadata ${{ vars.instance_name }} \
           --zone ${{ vars.compute_zone }} \
           --metadata=startup-script='#!/bin/bash
-          gcloud storage rsync gs://${{ vars.audio_bucket }} /opt/drop-radio-server/input \
+          gcloud storage rsync gs://${{ vars.audio_bucket }} /home/drop-radio-server/input \
             --recursive --delete-unmatched-destination-objects
           '
 
@@ -94,4 +94,4 @@ jobs:
           gcloud compute instances update-container ${{ vars.instance_name }} \
           --zone ${{ vars.compute_zone }} \
           --container-image ghcr.io/resisttheurge/drop-radio-server:latest \
-          --container-mount-host-path mount-path=/app/input,host-path=/opt/drop-radio-server/input,mode=ro
+          --container-mount-host-path mount-path=/app/input,host-path=/home/drop-radio-server/input,mode=ro
