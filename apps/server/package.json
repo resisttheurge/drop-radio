@@ -72,7 +72,6 @@
       },
       "docker-build": {
         "command": "docker build -t drop-radio-server:{args.tag} {projectRoot}",
-        "cache": true,
         "dependsOn": [
           "build"
         ],
