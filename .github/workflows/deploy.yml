@@ -85,9 +85,16 @@ jobs:
           gcloud compute instances add-metadata ${{ vars.instance_name }} \
           --zone ${{ vars.compute_zone }} \
           --metadata=startup-script='#!/bin/bash
+          # mount drop-audio disk
+          fsck.ext4 -tvy /dev/disk/by-id/google-${{ vars.drop_audio_disk }}
+          mkdir -p /mnt/disks/drop-audio
+          mount -o discard,defaults /dev/disk/by-id/google-${{ vars.drop_audio_disk }} /mnt/disks/drop-audio
+          chmod a+w /mnt/disks/drop-audio
+
+          # pull gcloud image and sync audio files to disk
           docker pull gcr.io/google.com/cloudsdktool/google-cloud-cli:489.0.0-stable
           docker run --rm gcr.io/google.com/cloudsdktool/google-cloud-cli:489.0.0-stable \
-            gcloud storage rsync gs://${{ vars.audio_bucket }} /home/drop-radio-server/input \
+            gcloud storage rsync gs://${{ vars.audio_bucket }} /mnt/disks/drop-audio \
             --recursive --delete-unmatched-destination-objects
           '
 
@@ -96,4 +103,4 @@ jobs:
           gcloud compute instances update-container ${{ vars.instance_name }} \
           --zone ${{ vars.compute_zone }} \
           --container-image ghcr.io/resisttheurge/drop-radio-server:latest \
-          --container-mount-host-path mount-path=/app/input,host-path=/home/drop-radio-server/input,mode=ro
+          --container-mount-host-path mount-path=/app/input,host-path=/mnt/disks/drop-audio,mode=ro
