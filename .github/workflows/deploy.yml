@@ -69,16 +69,15 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-
       - name: Authenticate to Google Cloud Compute
         id: auth-compute
         uses: google-github-actions/auth@v2
         with:
           project_id: drop-radio
           workload_identity_provider: ${{vars.workload_identity_provider}}
-          service_account: ${{vars.compute_ops_account}}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Set VM startup script
         run: |
