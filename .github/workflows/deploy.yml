@@ -81,10 +81,11 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Set VM startup script
-        run: |
+        run: >
           gcloud compute instances add-metadata ${{ vars.instance_name }} \
           --zone ${{ vars.compute_zone }} \
-          --metadata=startup-script='#!/bin/bash
+          --metadata=startup-script='
+          #!/bin/bash
           # mount drop-audio disk
           fsck.ext4 -tvy /dev/disk/by-id/google-${{ vars.drop_audio_disk }}
           mkdir -p /mnt/disks/drop-audio
@@ -99,7 +100,7 @@ jobs:
           '
 
       - name: Update Google Compute Engine instance
-        run: |
+        run: >
           gcloud compute instances update-container ${{ vars.instance_name }} \
           --zone ${{ vars.compute_zone }} \
           --container-image ghcr.io/resisttheurge/drop-radio-server:latest \
