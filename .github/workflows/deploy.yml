@@ -41,7 +41,6 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            drop-radio-server
             ghcr.io/resisttheurge/drop-radio-server
           # generate Docker tags based on the following events/attributes
           tags: |
@@ -68,28 +67,31 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Authenticate to Google Cloud Compute
         id: auth-compute
         uses: google-github-actions/auth@v2
         with:
           project_id: drop-radio
+          service_account: ${{ vars.compute_service_account }}
           workload_identity_provider: ${{vars.workload_identity_provider}}
-          service_account: ${{vars.compute_ops_account}}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Set VM startup script
         run: |
           gcloud compute instances add-metadata ${{ vars.instance_name }} \
-          --metadata=startup-script='#!/bin/bash
-          gcloud storage rsync gs://${{ vars.audio_bucket }} /opt/drop-radio-server/input \
-            --recursive --delete-unmatched-destination-objects
-          '
+            --zone=${{ vars.compute_zone }} \
+            --metadata=startup-script='#!/bin/bash
+              docker pull gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
+              docker run --rm -v /var/drop-radio-server/input:/rsync-output gcr.io/google.com/cloudsdktool/google-cloud-cli:slim gcloud storage rsync -r gs://${{ vars.audio_bucket }} /rsync-output --delete-unmatched-destination-objects
+            '
 
       - name: Update Google Compute Engine instance
         run: |
           gcloud compute instances update-container ${{ vars.instance_name }} \
-          --container-image ghcr.io/resisttheurge/drop-radio-server:latest \
-          --container-mount-host-path mount-path=/app/input,host-path=/opt/drop-radio-server/input,mode=ro
+          --zone=${{ vars.compute_zone }} \
+          --container-image=ghcr.io/resisttheurge/drop-radio-server:latest \
+          --container-mount-host-path=mount-path=/app/input,host-path=/var/drop-radio-server/input,mode=ro
