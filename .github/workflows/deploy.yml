@@ -85,7 +85,9 @@ jobs:
           gcloud compute instances add-metadata ${{ vars.instance_name }} \
           --zone ${{ vars.compute_zone }} \
           --metadata=startup-script='#!/bin/bash
-          gcloud storage rsync gs://${{ vars.audio_bucket }} /home/drop-radio-server/input \
+          docker pull gcr.io/google.com/cloudsdktool/google-cloud-cli:489.0.0-stable
+          docker run --rm gcr.io/google.com/cloudsdktool/google-cloud-cli:489.0.0-stable \
+            gcloud storage rsync gs://${{ vars.audio_bucket }} /home/drop-radio-server/input \
             --recursive --delete-unmatched-destination-objects
           '
 
