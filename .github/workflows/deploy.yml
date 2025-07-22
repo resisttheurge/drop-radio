@@ -41,7 +41,6 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            drop-radio-server
             ghcr.io/resisttheurge/drop-radio-server
           # generate Docker tags based on the following events/attributes
           tags: |
@@ -68,6 +67,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
