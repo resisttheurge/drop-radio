@@ -84,7 +84,7 @@ jobs:
         run: |
           gcloud compute instances add-metadata ${{ vars.instance_name }} \
             --zone=${{ vars.compute_zone }} \
-            --metadata=startup-script='#!/bin/bash
+            --metadata=^,,^startup-script='#!/bin/bash
               fsck.ext4 -tvy /dev/disk/by-id/google-${{ vars.drop_audio_disk }}
               mkdir -p /mnt/disks/drop-audio
               mount -o discard,defaults /dev/disk/by-id/google-${{ vars.drop_audio_disk }} /mnt/disks/drop-audio
