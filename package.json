@@ -11,6 +11,12 @@
     "targets": {
       "docs": {
         "cache": true,
+        "dependsOn": [
+          {
+            "projects": "*",
+            "target": "build"
+          }
+        ],
         "inputs": [
           "production",
           "^production"
