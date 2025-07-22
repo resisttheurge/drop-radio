@@ -71,17 +71,77 @@
         }
       },
       "docker-build": {
-        "command": "docker build apps/server/ -t drop-radio-server",
+        "command": "docker build -t drop-radio-server:{args.tag} {projectRoot}",
+        "cache": true,
         "dependsOn": [
           "build"
-        ]
+        ],
+        "inputs": [
+          {
+            "dependentTasksOutputFiles": "**/*",
+            "transitive": true
+          },
+          "{projectRoot}/Dockerfile"
+        ],
+        "defaultConfiguration": "production",
+        "configurations": {
+          "production": {
+            "tag": "latest"
+          },
+          "test": {
+            "tag": "test"
+          }
+        }
+      },
+      "docker-push": {
+        "executor": "nx:run-commands",
+        "dependsOn": [
+          "docker-build"
+        ],
+        "inputs": [
+          {
+            "runtime": "docker images -q drop-radio-server:{args.tag}"
+          }
+        ],
+        "options": {
+          "commands": [
+            "echo \"$GITHUB_TOKEN\" | docker login {args.containerRepository} -u \"$GITHUB_USERNAME\" --password-stdin",
+            "docker image tag $(docker images -q drop-radio-server:{args.tag}) {args.containerRepository}/{args.namespace}/drop-radio-server:{args.tag}",
+            "docker image push {args.containerRepository}/{args.namespace}/drop-radio-server:{args.tag}"
+          ],
+          "parallel": false,
+          "containerRepository": "ghcr.io",
+          "namespace": "resisttheurge"
+        },
+        "defaultConfiguration": "production",
+        "configurations": {
+          "production": {
+            "tag": "latest"
+          }
+        }
       },
       "docker-run": {
-        "command": "docker run --mount type=bind,src={args.inputDir},dst=/drop-radio/server/input -p 3000:3000 -t drop-radio-server",
+        "command": "docker run -p 8080:80 --mount type=bind,ro,src=$(pwd)/{args.audioDir},dst=/app/input -t drop-radio-server:{args.tag}",
         "continuous": true,
         "dependsOn": [
           "docker-build"
-        ]
+        ],
+        "inputs": [
+          {
+            "runtime": "docker images -q drop-radio-server:{args.tag}"
+          }
+        ],
+        "defaultConfiguration": "production",
+        "configurations": {
+          "test": {
+            "tag": "test",
+            "audioDir": "assets/drop-audio-test"
+          },
+          "production": {
+            "tag": "latest",
+            "audioDir": "assets/drop-audio"
+          }
+        }
       }
     }
   }
