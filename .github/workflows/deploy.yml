@@ -74,6 +74,7 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           project_id: drop-radio
+          service_account: ${{ vars.compute_service_account }}
           workload_identity_provider: ${{vars.workload_identity_provider}}
 
       - name: Set up Cloud SDK
