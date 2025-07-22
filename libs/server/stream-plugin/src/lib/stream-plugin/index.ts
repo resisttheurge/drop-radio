@@ -4,7 +4,14 @@ import staticPlugin from '@fastify/static'
 import { Temporal } from '@js-temporal/polyfill'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
-import { filter, firstValueFrom, Subject, Subscription, timer } from 'rxjs'
+import {
+  filter,
+  firstValueFrom,
+  Subject,
+  Subscription,
+  throttleTime,
+  timer,
+} from 'rxjs'
 
 import { hlsStream } from '@drop-radio/ffmpeg'
 
@@ -24,6 +31,7 @@ declare module 'fastify' {
 }
 
 export interface StreamOptions {
+  readonly fileExtension: string
   readonly inputDirectory: string
   readonly outputDirectory: string
   readonly start?: string
@@ -42,14 +50,14 @@ export interface StreamDecorations {
 
 const streamPlugin: FastifyPluginAsync<StreamOptions> = async (
   fastify,
-  { inputDirectory, outputDirectory, start }
+  { fileExtension, inputDirectory, outputDirectory, start }
 ) => {
   const absInDir = path.resolve(inputDirectory)
   const absOutDir = path.resolve(outputDirectory)
   const absPlaylistFile = path.resolve(absOutDir, 'playlist.txt')
   const absMetaPlaylistFile = path.resolve(absOutDir, 'meta-playlist.txt')
 
-  const playlist = await readPlaylistFromDirectory(absInDir)
+  const playlist = await readPlaylistFromDirectory(absInDir, fileExtension)
 
   fastify.register(startInstantPlugin, { start })
 
@@ -118,7 +126,7 @@ const streamPlugin: FastifyPluginAsync<StreamOptions> = async (
 
     fastify.log.info(`Seeking to time: ${seekTime} microseconds`)
 
-    writePlaylistToFile(playlist, absPlaylistFile, seekTime)
+    await writePlaylistToFile(playlist, absPlaylistFile, seekTime)
 
     if (seekTime > 0) {
       const schedule = (playlist.duration - (seekTime % playlist.duration)) / 2
@@ -136,11 +144,12 @@ const streamPlugin: FastifyPluginAsync<StreamOptions> = async (
       {
         concat: true,
         loopCount: -1,
-        segmentDuration: 4,
-        segmentCount: 4,
+        segmentDuration: 1,
+        segmentCount: 50,
       }
     )
       .pipe(
+        throttleTime(1000),
         filter(({ out_time_us }) => out_time_us !== 'N/A'),
         convertPlaylistProgress(fastify.stream.playlist, seekTime)
       )

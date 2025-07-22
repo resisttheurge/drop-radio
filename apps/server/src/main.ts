@@ -1,3 +1,4 @@
+import { createGcpLoggingPinoConfig } from '@google-cloud/pino-logging-gcp-config'
 import Fastify from 'fastify'
 import 'pino-pretty'
 
@@ -17,7 +18,7 @@ const envToLogger = {
       },
     },
   },
-  production: true,
+  production: createGcpLoggingPinoConfig(),
 }
 
 // Instantiate Fastify with some config

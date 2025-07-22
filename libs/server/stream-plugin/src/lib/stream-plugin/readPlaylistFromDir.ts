@@ -1,28 +1,26 @@
 import fs from 'node:fs/promises'
-import path from 'node:path'
+import { resolve } from 'node:path'
 
 import { ffprobeFormat } from '@drop-radio/ffmpeg'
 
-import { Playlist } from './Playlist'
-import { PlaylistEntry } from './Playlist'
+import { Playlist, PlaylistEntry } from './Playlist'
 
 export async function readPlaylistFromDirectory(
-  directory: string
+  directory: string,
+  fileExtension = 'wav'
 ): Promise<Playlist> {
-  const files = await fs.readdir(directory, { withFileTypes: true })
-  const entries = await Promise.all(
-    files
-      .filter((file) => file.isFile() && file.name.endsWith('.wav'))
-      .map(async (file) => {
-        const filepath = path.resolve(directory, file.name)
-        const { format } = await ffprobeFormat(filepath)
-        return {
-          title: file.name.replace(/\.wav$/, ''),
-          filename: file.name,
-          duration: Number.parseInt(format.duration.replace('.', '')),
-          filepath,
-        } as PlaylistEntry
-      })
-  )
+  const entries = [] as PlaylistEntry[]
+  for await (const file of fs.glob(`**/*.${fileExtension}`, {
+    cwd: directory,
+  })) {
+    const path = resolve(directory, file)
+    const { format } = await ffprobeFormat(path)
+    entries.push({
+      title: format.filename.replace(new RegExp(`.${fileExtension}$`), ''),
+      filename: format.filename,
+      duration: Number.parseInt(format.duration.replace('.', '')),
+      filepath: path,
+    })
+  }
   return new Playlist(entries)
 }
