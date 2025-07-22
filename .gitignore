@@ -119,13 +119,15 @@ vite.config.*.timestamp*
 vitest.config.*.timestamp*
 
 # Generated documentation output
-/generated-docs
+assets/generated-docs/
 
 # Local environment files
 *.local.env
 
 # Local audio input directory
-/server-audio-files
+assets/drop-audio/*
+!assets/drop-audio/.gitkeep
 
-# Local stream output directory
-/server-stream-files
+# Local audio output directory
+assets/drop-stream/*
+!assets/drop-stream/.gitkeep
