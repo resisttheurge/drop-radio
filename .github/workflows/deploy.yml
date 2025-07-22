@@ -6,15 +6,15 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  packages: write
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-    steps:
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
 
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -63,10 +63,12 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: apps/server
-          build-contexts: audio=assets/drop-audio
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Authenticate to Google Cloud Compute
         id: auth-compute
