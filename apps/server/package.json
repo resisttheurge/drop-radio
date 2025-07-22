@@ -98,11 +98,6 @@
         "dependsOn": [
           "docker-build"
         ],
-        "inputs": [
-          {
-            "runtime": "docker images -q drop-radio-server:{args.tag}"
-          }
-        ],
         "options": {
           "commands": [
             "echo \"$GITHUB_TOKEN\" | docker login {args.containerRepository} -u \"$GITHUB_USERNAME\" --password-stdin",
