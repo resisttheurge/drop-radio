@@ -1,12 +1,17 @@
 import nx from '@nx/eslint-plugin'
+import jest from 'eslint-plugin-jest'
 import tsdoc from 'eslint-plugin-tsdoc'
 
 export default [
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
+  jest.configs['flat/recommended'],
   {
-    plugins: { tsdoc },
+    plugins: {
+      tsdoc,
+      jest,
+    },
   },
   {
     ignores: [
@@ -45,16 +50,32 @@ export default [
   },
   {
     files: [
-      '**/*.ts',
-      '**/*.tsx',
-      '**/*.cts',
-      '**/*.mts',
-      '**/*.js',
-      '**/*.jsx',
-      '**/*.cjs',
-      '**/*.mjs',
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
+      '**/*.spec.cts',
+      '**/*.spec.mts',
+      '**/*.spec.js',
+      '**/*.spec.jsx',
+      '**/*.spec.cjs',
+      '**/*.spec.mjs',
     ],
-    // Override or add rules here
-    rules: {},
+    plugins: {
+      jest,
+    },
+    languageOptions: {
+      globals: jest.environments.globals.globals,
+    },
+    settings: {
+      jest: {
+        globalPackage: '@fast-check/jest',
+      },
+    },
+    rules: {
+      'jest/no-conditional-expect': 'error',
+      'jest/no-standalone-expect': [
+        'error',
+        { additionalTestBlockFunctions: ['it', 'it.prop'] },
+      ],
+    },
   },
 ]
