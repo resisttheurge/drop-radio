@@ -82,6 +82,7 @@ jobs:
       - name: Set VM startup script
         run: |
           gcloud compute instances add-metadata ${{ vars.instance_name }} \
+          --zone ${{ vars.compute_zone }} \
           --metadata=startup-script='#!/bin/bash
           gcloud storage rsync gs://${{ vars.audio_bucket }} /opt/drop-radio-server/input \
             --recursive --delete-unmatched-destination-objects
