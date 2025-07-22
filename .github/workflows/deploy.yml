@@ -10,8 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -51,7 +51,7 @@ jobs:
             type=sha
 
       - name: Log in to the Container registry
-        uses: docker/login-action
+        uses: docker/login-action@v3
         with:
           registry: https://ghcr.io
           username: ${{ github.actor }}
@@ -66,9 +66,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: 'Authenticate to Google Cloud Compute'
-        id: 'auth-compute'
-        uses: 'google-github-actions/auth@v2'
+      - name: Authenticate to Google Cloud Compute
+        id: auth-compute
+        uses: google-github-actions/auth@v2
         with:
           project_id: drop-radio
           workload_identity_provider: ${{vars.workload_identity_provider}}
