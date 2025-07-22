@@ -85,20 +85,18 @@ jobs:
           gcloud compute instances add-metadata ${{ vars.instance_name }} \
             --zone=${{ vars.compute_zone }} \
             --metadata=startup-script='#!/bin/bash
-          fsck.ext4 -tvy /dev/disk/by-id/google-${{ vars.drop_audio_disk }}
-          mkdir -p /mnt/disks/drop-audio
-          mount -o discard,defaults /dev/disk/by-id/google-${{ vars.drop_audio_disk }} /mnt/disks/drop-audio
-          chmod a+w /mnt/disks/drop-audio
+              fsck.ext4 -tvy /dev/disk/by-id/google-${{ vars.drop_audio_disk }}
+              mkdir -p /mnt/disks/drop-audio
+              mount -o discard,defaults /dev/disk/by-id/google-${{ vars.drop_audio_disk }} /mnt/disks/drop-audio
+              chmod a+w /mnt/disks/drop-audio
 
-          docker pull gcr.io/google.com/cloudsdktool/google-cloud-cli:489.0.0-stable
-          docker run --rm gcr.io/google.com/cloudsdktool/google-cloud-cli:489.0.0-stable \
-            gcloud storage rsync gs://${{ vars.audio_bucket }} /mnt/disks/drop-audio \
-            --recursive --delete-unmatched-destination-objects
-          '
+              docker pull gcr.io/google.com/cloudsdktool/google-cloud-cli:489.0.0-stable
+              docker run --rm gcr.io/google.com/cloudsdktool/google-cloud-cli:489.0.0-stable gcloud storage rsync gs://${{ vars.audio_bucket }} /mnt/disks/drop-audio --recursive --delete-unmatched-destination-objects
+            '
 
       - name: Update Google Compute Engine instance
         run: |
           gcloud compute instances update-container ${{ vars.instance_name }} \
-            --zone=${{ vars.compute_zone }} \
-            --container-image=ghcr.io/resisttheurge/drop-radio-server:latest \
-            --container-mount-host-path=mount-path=/app/input,host-path=/mnt/disks/drop-audio,mode=ro
+          --zone=${{ vars.compute_zone }} \
+          --container-image=ghcr.io/resisttheurge/drop-radio-server:latest \
+          --container-mount-host-path=mount-path=/app/input,host-path=/mnt/disks/drop-audio,mode=ro
