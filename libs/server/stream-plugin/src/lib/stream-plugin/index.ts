@@ -145,7 +145,12 @@ const streamPlugin: FastifyPluginAsync<StreamOptions> = async (
         concat: true,
         loopCount: -1,
         segmentDuration: 1,
-        segmentCount: 50,
+        segmentCount: 12,
+        formats: [
+          { name: 'high', bitrate: '640k', sampleRate: '48k' },
+          { name: 'low', bitrate: '32k', sampleRate: '12k' },
+        ],
+        masterPlaylistName: 'live',
       }
     )
       .pipe(
