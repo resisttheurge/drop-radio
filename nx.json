@@ -87,14 +87,12 @@
     "@nx/esbuild:esbuild": {
       "cache": true,
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"],
-      "outputs": ["{projectRoot}/dist"]
+      "inputs": ["production", "^production"]
     },
     "@nx/js:swc": {
       "cache": true,
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"],
-      "outputs": ["{projectRoot}/dist"]
+      "inputs": ["production", "^production"]
     }
   }
 }
