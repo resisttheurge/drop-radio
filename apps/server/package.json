@@ -50,7 +50,7 @@
         "executor": "@nx/js:node",
         "defaultConfiguration": "development",
         "dependsOn": [
-          "build"
+          "^build"
         ],
         "options": {
           "buildTarget": "@drop-radio/server:build",
