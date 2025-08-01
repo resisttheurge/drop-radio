@@ -115,6 +115,7 @@
   },
   "workspaces": [
     "apps/*",
-    "libs/server/*"
+    "libs/server/*",
+    "libs/shared/*"
   ]
 }
