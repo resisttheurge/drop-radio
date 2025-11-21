@@ -28,6 +28,7 @@
     }
   },
   "dependencies": {
+    "@fastify/cors": "^11.1.0",
     "@fastify/static": "^8.2.0",
     "@google-cloud/pino-logging-gcp-config": "^1.0.6",
     "@js-temporal/polyfill": "^0.5.1",
