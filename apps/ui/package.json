@@ -5,6 +5,13 @@
   "nx": {
     "tags": [
       "scope:ui"
-    ]
+    ],
+    "targets": {
+      "build": {
+        "options": {
+          "emptyOutDir": true
+        }
+      }
+    }
   }
 }

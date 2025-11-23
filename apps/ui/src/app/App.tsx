@@ -12,7 +12,7 @@ export const App = () => {
     const setup = async () => {
       await TrackPlayer.setupPlayer()
       await TrackPlayer.add({
-        url: 'http://server.drop-radio.info/stream/live.m3u8',
+        url: 'https://server.drop-radio.info/stream/live.m3u8',
       })
       await TrackPlayer.play()
       setReady(true)
@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
   dcMan: {
     width: 512,
     height: 512,
-    transform: [{ rotate: '90deg' }],
   },
 })
 
