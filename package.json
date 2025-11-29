@@ -4,7 +4,7 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "scripts": {
     "sync-audio": "gcloud storage rsync gs://drop-audio assets/drop-audio --recursive --delete-unmatched-destination-objects --exclude=.gitkeep",
-    "deploy-ui": "gcloud storage rsync dist/apps/ui/web gs://drop-radio-ui --recursive --delete-unmatched-destination-objects --exclude=.gitkeep",
+    "deploy-ui": "gcloud storage rsync dist/apps/ui/web gs://drop-radio-ui --recursive --delete-unmatched-destination-objects --exclude=.gitkeep --cache-control=\"public, max-age=60\"",
     "docs": "typedoc --options typedoc.config.mjs"
   },
   "private": true,
