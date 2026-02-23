@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs'
+import type { Config } from 'jest'
 
 // Reading the SWC compilation config for the spec files
 const swcJestConfig = JSON.parse(
@@ -16,7 +17,9 @@ export default {
     '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
+  testPathIgnorePatterns: ['^.+\\.arb\\.[tj]s$', '^.+\\.mock\\.[tj]s$'],
   coverageDirectory: 'test-output/jest/coverage',
-  coverageReporters: ['text'],
+  coverageReporters: ['text', 'html'],
+  coveragePathIgnorePatterns: ['^.+\\.arb\\.[tj]s$', '^.+\\.mock\\.[tj]s$'],
   coverageProvider: 'v8',
-}
+} as Config
