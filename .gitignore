@@ -131,3 +131,4 @@ assets/drop-audio/*
 # Local audio output directory
 assets/drop-stream/*
 !assets/drop-stream/.gitkeep
+.nx/polygraph
