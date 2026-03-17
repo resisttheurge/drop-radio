@@ -2,6 +2,9 @@
   "name": "@drop-radio/source",
   "version": "0.0.0",
   "license": "SEE LICENSE IN LICENSE.md",
+  "engines": {
+    "node": ">=20.20.0"
+  },
   "scripts": {
     "sync-audio": "gcloud storage rsync gs://drop-audio assets/drop-audio --recursive --delete-unmatched-destination-objects --exclude=.gitkeep",
     "docs": "typedoc --options typedoc.config.mjs"
