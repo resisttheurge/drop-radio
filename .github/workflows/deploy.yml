@@ -68,29 +68,15 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Authenticate to Google Cloud Compute
-        id: auth-compute
-        uses: google-github-actions/auth@v2
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
         with:
           project_id: drop-radio
-          service_account: ${{ vars.compute_service_account }}
-          workload_identity_provider: ${{vars.workload_identity_provider}}
+          service_account: ${{ vars.GHA_CLOUD_RUN_SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Set VM startup script
-        run: |
-          gcloud compute instances add-metadata ${{ vars.instance_name }} \
-            --zone=${{ vars.compute_zone }} \
-            --metadata=startup-script='#!/bin/bash
-              docker pull gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
-              docker run --rm -v /var/drop-radio-server/input:/rsync-output gcr.io/google.com/cloudsdktool/google-cloud-cli:slim gcloud storage rsync -r gs://${{ vars.audio_bucket }} /rsync-output --delete-unmatched-destination-objects
-            '
-
-      - name: Update Google Compute Engine instance
-        run: |
-          gcloud compute instances update-container ${{ vars.instance_name }} \
-          --zone=${{ vars.compute_zone }} \
-          --container-image=ghcr.io/resisttheurge/drop-radio-server:latest \
-          --container-mount-host-path=mount-path=/app/input,host-path=/var/drop-radio-server/input,mode=ro
+      - name: Deploy new drop-radio-server revision to Cloud Run
+        uses: 'google-github-actions/deploy-cloudrun@v3'
+        with:
+          image: ${{ vars.ARTIFACT_REGISTRY_URL }}/resisttheurge/drop-radio-server:main
+          service: ${{ vars.SERVICE_NAME }}
