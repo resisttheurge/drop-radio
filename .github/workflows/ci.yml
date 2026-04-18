@@ -27,8 +27,10 @@ jobs:
           node-version: ^24.14.0
 
       - name: Get installed Playwright version
+        uses: sergeysova/jq-action@v2
         id: playwright-version
-        run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').packages['node_modules/@playwright/test'].version)")" >> $GITHUB_ENV
+        with:
+          cmd: jq .packages."node_modules/@playwright/test".version package-lock.json -r
 
       - name: Cache playwright binaries
         uses: actions/cache@v5
@@ -36,7 +38,7 @@ jobs:
         with:
           path: |
             ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.value }}
 
       - run: npm ci --legacy-peer-deps
 
