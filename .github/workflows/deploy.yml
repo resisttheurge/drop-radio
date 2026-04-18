@@ -31,5 +31,5 @@ jobs:
         app: [server]
     uses: ./.github/workflows/gcp-run-deploy.yml
     with:
-      image: drop-radio-${{ matrix.app }}:${{ github.event.base_ref }}
-      service: drop-radio-${{ matrix.app }}-${{ github.event.base_ref == 'main' && 'prod' || 'test' }}
+      image: drop-radio-${{ matrix.app }}:${{ github.ref_name }}
+      service: drop-radio-${{ matrix.app }}-${{ github.ref_name == 'main' && 'prod' || 'test' }}
