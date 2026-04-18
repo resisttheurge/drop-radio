@@ -17,6 +17,9 @@ jobs:
   deploy-to-cloud-run:
     name: Deploy ${{ inputs.image }} to ${{ inputs.service }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
