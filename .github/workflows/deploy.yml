@@ -14,38 +14,22 @@ permissions:
   id-token: write
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  nx-build-docker-push:
     strategy:
       matrix:
         app: [server]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          filter: tree:0
-          fetch-depth: 0
+    uses: ./.github/workflows/docker-build-push.yml
+    with:
+      app: ${{ matrix.app }}
+      image: drop-radio-${{ matrix.app }}
+      context: apps/${{ matrix.app }}
 
-      # Cache node_modules
-      - name: Setup Node.js and npm
-        uses: actions/setup-node@v6
-        with:
-          node-version: ^24.14.0
-
-      - run: npm ci --legacy-peer-deps
-
-      - name: Build the ${{ matrix.app }} application
-        run: npx nx build ${{ matrix.app }}
-
-      - name: Build and push Docker image
-        uses: ./.github/workflows/docker-build-push.yml
-        with:
-          image: drop-radio-${{ matrix.app }}
-          context: apps/${{ matrix.app }}
-
-      - name: Deploy to Cloud Run
-        uses: ./.github/workflows/gcp-run-deploy.yml
-        with:
-          image: drop-radio-${{ matrix.app }}
-          tag: ${{ github.event.base_ref }}
-          service: drop-radio-${{ matrix.app }}-${{ github.event.base_ref == 'main' && 'prod' || 'test' }}
+  gcp-run-deploy:
+    needs: nx-build-docker-push
+    strategy:
+      matrix:
+        app: [server]
+    uses: ./.github/workflows/gcp-run-deploy.yml
+    with:
+      image: drop-radio-${{ matrix.app }}:${{ github.ref_name }}
+      service: drop-radio-${{ matrix.app }}-${{ github.ref_name == 'main' && 'prod' || 'test' }}
