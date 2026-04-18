@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - development
   workflow_dispatch:
 
 permissions:
@@ -15,7 +16,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        app: [server]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -31,52 +34,18 @@ jobs:
 
       - run: npm ci --legacy-peer-deps
 
-      - name: Build the server application
-        run: npx nx build server
+      - name: Build the ${{ matrix.app }} application
+        run: npx nx build ${{ matrix.app }}
 
-      - name: Generate docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
+      - name: Build and push Docker image
+        uses: ./.github/workflows/docker-build-push.yml
         with:
-          # list of Docker images to use as base name for tags
-          images: |
-            ghcr.io/resisttheurge/drop-radio-server
-          # generate Docker tags based on the following events/attributes
-          tags: |
-            latest
-            type=schedule
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=sha
+          image: drop-radio-${{ matrix.app }}
+          context: apps/${{ matrix.app }}
 
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
+      - name: Deploy to Cloud Run
+        uses: ./.github/workflows/gcp-run-deploy.yml
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push server image to GHCR
-        uses: docker/build-push-action@v6
-        with:
-          context: apps/server
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v3
-        with:
-          project_id: drop-radio
-          service_account: ${{ vars.GHA_CLOUD_RUN_SERVICE_ACCOUNT }}
-          workload_identity_provider: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
-
-      - name: Deploy new drop-radio-server revision to Cloud Run
-        uses: 'google-github-actions/deploy-cloudrun@v3'
-        with:
-          image: ${{ vars.ARTIFACT_REGISTRY_URL }}/resisttheurge/drop-radio-server:main
-          service: ${{ vars.SERVICE_NAME }}
+          image: drop-radio-${{ matrix.app }}
+          tag: ${{ github.event.base_ref }}
+          service: drop-radio-${{ matrix.app }}-${{ github.event.base_ref == 'main' && 'prod' || 'test' }}
