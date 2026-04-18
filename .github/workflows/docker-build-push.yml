@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          fetch-tags: true
 
       # Cache node_modules
       - name: Setup Node.js and npm
