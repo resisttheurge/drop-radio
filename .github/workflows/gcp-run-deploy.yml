@@ -1,0 +1,32 @@
+name: Deploy Docker Image to Cloud Run
+on:
+  workflow_call:
+    inputs:
+      image:
+        description: |
+          The name of the Docker image to deploy to Cloud Run
+        required: true
+        type: string
+      service:
+        description: |
+          The name of the Cloud Run service to deploy
+        required: true
+        type: string
+
+jobs:
+  deploy-to-cloud-run:
+    name: Deploy ${{ inputs.image }} to ${{ inputs.service }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: drop-radio
+          service_account: ${{ vars.GHA_CLOUD_RUN_SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
+
+      - name: Deploy ${{ inputs.service }} to Cloud Run
+        uses: 'google-github-actions/deploy-cloudrun@v3'
+        with:
+          service: ${{ inputs.service }}
+          image: ${{ vars.ARTIFACT_REGISTRY_URL }}/resisttheurge/${{ inputs.image }}
