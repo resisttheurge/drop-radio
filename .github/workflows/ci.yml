@@ -30,7 +30,7 @@ jobs:
         uses: sergeysova/jq-action@v2
         id: playwright-version
         with:
-          cmd: jq .packages."node_modules/@playwright/test".version package-lock.json -r
+          cmd: 'jq .packages."node_modules/@playwright/test".version package-lock.json -r'
 
       - name: Cache playwright binaries
         uses: actions/cache@v5
