@@ -7,7 +7,7 @@
       "scope:ui"
     ],
     "implicitDependencies": [
-      "@drop-radio/ui"
+      "@drop-radio/ui-old"
     ]
   }
 }

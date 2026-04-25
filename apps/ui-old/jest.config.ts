@@ -18,5 +18,5 @@ module.exports = {
       'react-native/jest/assetFileTransformer.js'
     ),
   },
-  coverageDirectory: '../../coverage/apps/ui',
-};
+  coverageDirectory: '../../coverage/apps/ui-old',
+}

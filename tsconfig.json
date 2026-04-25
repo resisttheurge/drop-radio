@@ -7,9 +7,6 @@
       "path": "./apps/ui-e2e"
     },
     {
-      "path": "./apps/ui"
-    },
-    {
       "path": "./apps/server-e2e"
     },
     {
@@ -20,6 +17,9 @@
     },
     {
       "path": "./libs/server/stream-plugin"
+    },
+    {
+      "path": "./apps/ui-old"
     }
   ]
 }

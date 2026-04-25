@@ -1,8 +1,8 @@
-const { withNxMetro } = require('@nx/react-native');
-const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { withNxMetro } = require('@nx/react-native')
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config')
 
-const defaultConfig = getDefaultConfig(__dirname);
-const { assetExts, sourceExts } = defaultConfig.resolver;
+const defaultConfig = getDefaultConfig(__dirname)
+const { assetExts, sourceExts } = defaultConfig.resolver
 
 /**
  * Metro configuration
@@ -19,7 +19,7 @@ const customConfig = {
     assetExts: assetExts.filter((ext) => ext !== 'svg'),
     sourceExts: [...sourceExts, 'cjs', 'mjs', 'svg'],
   },
-};
+}
 
 module.exports = withNxMetro(mergeConfig(defaultConfig, customConfig), {
   // Change this to true to see debugging info.
@@ -29,4 +29,4 @@ module.exports = withNxMetro(mergeConfig(defaultConfig, customConfig), {
   extensions: [],
   // Specify folders to watch, in addition to Nx defaults (workspace libraries and node_modules)
   watchFolders: [],
-});
+})
