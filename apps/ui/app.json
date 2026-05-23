@@ -1,35 +1,72 @@
 {
   "expo": {
-    "name": "Ui",
+    "name": "Drop Radio",
     "slug": "@drop-radio/ui",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
     "scheme": "@drop-radio/ui",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "backgoundColor": "",
+    "experiments": {
+      "typedRoutes": true
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "info.drop-radio.ui",
+      "icon": {
+        "light": "./assets/images/light-icon.png",
+        "dark": "./assets/images/dark-icon.png",
+        "tinted": "./assets/images/tinted-icon-ios.png"
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/adaptive-icon-android-fg.png",
+        "backgroundImage": "./assets/images/adaptive-icon-android-bg.png",
+        "monochromeImage": "./assets/images/monochrome-icon-android.png"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": ["android.permission.MODIFY_AUDIO_SETTINGS"],
+      "package": "info.drop_radio.ui"
     },
     "web": {
-      "bundler": "metro",
-      "favicon": "./assets/images/favicon.png"
+      "bundler": "metro"
     },
     "plugins": [
       [
+        "expo-router",
+        {
+          "root": "./apps/ui/src/app"
+        }
+      ],
+      [
+        "expo-asset",
+        {
+          "assets": [
+            "./assets/images/spinner_light.png",
+            "./assets/images/spinner_dark.png"
+          ]
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
+          "image": "./assets/images/splash-screen-light.png",
+          "imageWidth": 512,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#f2f2f3",
+          "dark": {
+            "image": "./assets/images/splash-screen-dark.png",
+            "backgroundColor": "#333133"
+          }
         }
       ]
     ]

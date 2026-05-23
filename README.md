@@ -1,4 +1,4 @@
-<img src="assets/favicon/dc-man-icon.png" alt="Drop Radio Logo">
+<img src="assets/icons/favicon.svg" alt="Drop Radio Logo">
 
 # Drop Radio Embraces You
 

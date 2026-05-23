@@ -7,7 +7,7 @@ const config = {
       .filter(ref => !ref.path.includes('e2e'))
       .map((ref) => ref.path),
   entryPointStrategy: 'packages',
-  favicon: 'assets/favicon/favicon.ico',
+  favicon: 'assets/icons/favicon.svg',
   out: 'assets/generated-docs',
   packageOptions: {
     entryPoints: [

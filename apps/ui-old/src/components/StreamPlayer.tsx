@@ -294,7 +294,7 @@ export function StreamPlayer({
         {
           backgroundColor: backgroundColor.interpolate({
             inputRange: [0, 1],
-            outputRange: ['rgba(255, 255, 255, 1)', 'rgba(119, 0, 0, 1)'],
+            outputRange: ['rgba(255, 255, 255, 1)', '#770000'],
           }),
         },
       ]}
