@@ -40,7 +40,12 @@
     "react-native-worklets": "*",
     "react-native": "*",
     "react": "*",
-    "shaka-player": "*"
+    "shaka-player": "*",
+    "@reduxjs/toolkit": "*",
+    "react-redux": "*",
+    "chroma-js": "*",
+    "tiny-invariant": "*",
+    "expo-linear-gradient": "*"
   },
   "devDependencies": {
     "@nx/detox": "*",

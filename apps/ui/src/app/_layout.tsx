@@ -1,52 +1,52 @@
-import { Theme, ThemeProvider } from '@react-navigation/native'
+import { ColorTheme, NeutralDarkTheme, NeutralLightTheme } from '@/constants'
+import { ColorThemeContext } from '@/hooks/use-color-theme'
 import { Slot } from 'expo-router'
 import { useMemo } from 'react'
 import { StyleSheet, useColorScheme } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import Loading from '../components/loading'
-import { DarkTheme, LightTheme } from '../constants/themes'
 
 export function SuspenseFallback() {
   const colorScheme = useColorScheme()
   const theme = useMemo(
-    () => (colorScheme === 'dark' ? DarkTheme : LightTheme),
+    () => (colorScheme === 'dark' ? NeutralDarkTheme : NeutralLightTheme),
     [colorScheme]
   )
   const styles = useMemo(() => themedStyles(theme), [theme])
   return (
-    <ThemeProvider value={theme}>
+    <ColorThemeContext value={theme}>
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
           <Loading />
         </SafeAreaView>
       </SafeAreaProvider>
-    </ThemeProvider>
+    </ColorThemeContext>
   )
 }
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
   const theme = useMemo(
-    () => (colorScheme === 'dark' ? DarkTheme : LightTheme),
+    () => (colorScheme === 'dark' ? NeutralDarkTheme : NeutralLightTheme),
     [colorScheme]
   )
   const styles = useMemo(() => themedStyles(theme), [theme])
   return (
-    <ThemeProvider value={theme}>
+    <ColorThemeContext value={theme}>
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
           <Slot />
         </SafeAreaView>
       </SafeAreaProvider>
-    </ThemeProvider>
+    </ColorThemeContext>
   )
 }
 
-function themedStyles(theme: Theme) {
+function themedStyles(theme: ColorTheme) {
   return StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: theme.colors.background,
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: theme.dark ? theme.shadow.css() : theme.shine.css(),
     },
   })
 }

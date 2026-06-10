@@ -11,7 +11,7 @@ import Svg, {
   Symbol,
   Use,
 } from 'react-native-svg'
-export default function FallingMan(props: SvgProps & { theme: Theme }) {
+export default function FallingManLogo(props: SvgProps & { theme: Theme }) {
   const { colors } = props.theme
   return (
     <Svg id="favicon-adaptive" viewBox="94 94 836 836" {...props}>

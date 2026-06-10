@@ -1,15 +1,14 @@
 {
   "expo": {
     "name": "Drop Radio",
-    "slug": "@drop-radio/ui",
+    "slug": "drop-radio-ui",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "@drop-radio/ui",
+    "scheme": "drop-radio-ui",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "backgoundColor": "",
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "reactCompiler": false
     },
     "ios": {
       "supportsTablet": true,

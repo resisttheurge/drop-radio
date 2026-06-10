@@ -1,17 +1,11 @@
 import { useTheme } from '@react-navigation/native'
 import { Canvas } from '@shopify/react-native-skia'
-import { AudioPlayer, useAudioPlayerStatus } from 'expo-audio'
+import { useAudioPlayerStatus } from 'expo-audio'
 import { useMemo } from 'react'
 import { Pressable } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
-import { SpinningMan } from './visualizations'
-
-export type VisualizationType = 'spinning-man'
-
-export interface VisualizerProps {
-  visualization?: VisualizationType
-  player: AudioPlayer
-}
+import { SpinningMan } from '../visualizations'
+import { VisualizerProps } from './props'
 
 export default function Visualizer({
   visualization = 'spinning-man',

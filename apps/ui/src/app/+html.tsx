@@ -1,16 +1,23 @@
-import { useTheme } from '@react-navigation/native'
+import { NeutralDarkTheme, NeutralLightTheme } from '@/constants'
 import { ScrollViewStyleReset } from 'expo-router/html'
-import { type PropsWithChildren } from 'react'
+import { useMemo, type PropsWithChildren } from 'react'
+import { useColorScheme } from 'react-native'
 
 // This file is web-only and used to configure the root HTML for every
 // web page during static rendering.
 // The contents of this function only run in Node.js environments and
 // do not have access to the DOM or browser APIs.
 export default function Root({ children }: PropsWithChildren) {
-  const {
-    colors: { background },
-  } = useTheme()
-  const style = { backgroundColor: background }
+  const colorScheme = useColorScheme()
+  const style = useMemo(
+    () => ({
+      backgroundColor:
+        colorScheme === 'dark'
+          ? NeutralDarkTheme.shadow.css()
+          : NeutralLightTheme.shine.css(),
+    }),
+    [colorScheme]
+  )
   return (
     <html lang="en">
       <head>

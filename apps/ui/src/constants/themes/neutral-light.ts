@@ -1,0 +1,26 @@
+import chroma from 'chroma-js'
+import { ColorTheme } from './color-theme'
+
+export const dark = false
+export const type = 'neutral'
+export const shadow = chroma('#636363')
+export const form = chroma('#9a9a9a')
+export const shine = chroma('#d4d4d4')
+export const border = chroma('#313131')
+export const focus = chroma('#070707')
+export const textCandidates = chroma
+  .scale(['black', focus, border, shadow, form, shine, 'white'])
+  .mode('oklch')
+  .padding(0.2)
+  .colors(13, null)
+
+export default {
+  dark,
+  type,
+  shadow,
+  form,
+  shine,
+  border,
+  focus,
+  textCandidates,
+} as ColorTheme
