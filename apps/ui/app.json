@@ -44,7 +44,8 @@
         {
           "assets": [
             "./assets/images/spinner_light.png",
-            "./assets/images/spinner_dark.png"
+            "./assets/images/spinner_dark.png",
+            "./assets/movies/the-move.mp4"
           ]
         }
       ],
@@ -53,6 +54,13 @@
         {
           "microphonePermission": false,
           "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
         }
       ],
       [

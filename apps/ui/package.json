@@ -45,7 +45,9 @@
     "react-redux": "*",
     "chroma-js": "*",
     "tiny-invariant": "*",
-    "expo-linear-gradient": "*"
+    "expo-linear-gradient": "*",
+    "@expo/vector-icons": "*",
+    "expo-video": "*"
   },
   "devDependencies": {
     "@nx/detox": "*",
