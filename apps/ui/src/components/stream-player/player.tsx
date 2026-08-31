@@ -1,13 +1,35 @@
 import useStream from '@/hooks/useStream'
 import { useVideoPlayer, VideoView } from 'expo-video'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import Neu from '../neu'
 import Control from './control'
 import { Status } from './status'
 
+function calcAngle(x: number, y: number, center: { x: number; y: number }) {
+  const dx = x - center.x
+  const dy = y - center.y
+  return Math.atan2(dy, dx)
+}
+
 export default function StreamPlayer() {
   const [lightAngle, setLightAngle] = useState(0.66 * Math.PI)
+  const [center, setCenter] = useState({ x: 0, y: 0 })
+  const pressableRef = useRef<View>(null)
+
+  useLayoutEffect(() => {
+    pressableRef.current?.measure((x, y, width, height, pageX, pageY) => {
+      setCenter({ x: pageX + width / 2, y: pageY + height / 2 })
+    })
+  }, [pressableRef])
+
   const [controlsActive, setControlsActive] = useState(false)
   const [lastUserInteraction, setLastUserInteraction] = useState(Date.now())
   useEffect(() => {
@@ -50,21 +72,34 @@ export default function StreamPlayer() {
   }, [audioPlayer, audioStatus, videoPlayer])
 
   return (
-    <Neu angle={lightAngle} intensity={2} style={styles.container} slant>
+    <Neu
+      angle={lightAngle}
+      intensity={1}
+      style={styles.container}
+      slant
+      extrude
+    >
       <Pressable
+        ref={pressableRef}
         style={{ flex: 1 }}
-        onPress={() => {
-          console.log('Press')
+        onPress={(event) => {
+          setLightAngle(
+            calcAngle(event.nativeEvent.pageX, event.nativeEvent.pageY, center)
+          )
           setControlsActive(!controlsActive)
           setLastUserInteraction(Date.now())
         }}
-        onHoverIn={() => {
-          console.log('HoverIn')
+        onHoverIn={(event) => {
+          setLightAngle(
+            calcAngle(event.nativeEvent.pageX, event.nativeEvent.pageY, center)
+          )
           setControlsActive(true)
           setLastUserInteraction(Date.now())
         }}
         onPointerMove={(event) => {
-          console.log('PointerMove')
+          setLightAngle(
+            calcAngle(event.nativeEvent.pageX, event.nativeEvent.pageY, center)
+          )
           setControlsActive(true)
           setLastUserInteraction(Date.now())
         }}
@@ -81,7 +116,14 @@ export default function StreamPlayer() {
           lightAngle={lightAngle}
           status={status}
           active={controlsActive}
-          onPress={togglePlay}
+          onPress={() => {
+            if (controlsActive) {
+              togglePlay()
+            } else {
+              setControlsActive(true)
+            }
+            setLastUserInteraction(Date.now())
+          }}
         />
       </View>
     </Neu>
