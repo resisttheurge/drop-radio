@@ -1,18 +1,13 @@
 import { ColorTheme, NeutralDarkTheme } from '@/constants'
 import { LinearGradient, LinearGradientProps } from 'expo-linear-gradient'
-import { forwardRef, LegacyRef, useMemo } from 'react'
+import { useMemo } from 'react'
 import { StyleSheet, ViewProps } from 'react-native'
 import Animated, {
   AnimatedProps,
   createAnimatedComponent,
 } from 'react-native-reanimated'
 
-export const AnimatedLinearGradient = createAnimatedComponent(
-  forwardRef((props: LinearGradientProps, ref: LegacyRef<LinearGradient>) => {
-    // some additional logic
-    return <LinearGradient ref={ref} {...props} />
-  })
-)
+export const AnimatedLinearGradient = createAnimatedComponent(LinearGradient)
 
 export type Curvature = 'flat' | 'convex' | 'concave'
 
