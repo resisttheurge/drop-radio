@@ -1,4 +1,3 @@
-export * from './color-theme'
 export { default as ErrorDarkTheme } from './error-dark'
 export { default as ErrorLightTheme } from './error-light'
 export { default as NeutralDarkTheme } from './neutral-dark'

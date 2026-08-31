@@ -1,4 +1,4 @@
-import { black, white } from '@/constants/colors'
+import { black, white } from '@drop-radio/color'
 import chroma from 'chroma-js'
 import { StyleSheet, View } from 'react-native'
 import ColorChip from './chip'

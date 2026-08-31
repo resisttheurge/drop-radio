@@ -14,6 +14,7 @@
     ]
   },
   "dependencies": {
+    "@drop-radio/theme": "*",
     "@expo/metro-config": "*",
     "@react-navigation/native": "*",
     "@shopify/react-native-skia": "*",

@@ -23,6 +23,15 @@
     },
     {
       "path": "./apps/ui"
+    },
+    {
+      "path": "./libs/shared/color"
+    },
+    {
+      "path": "./libs/shared/theme"
+    },
+    {
+      "path": "./libs/ui/color-palette"
     }
   ]
 }

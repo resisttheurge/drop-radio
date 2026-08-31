@@ -1,9 +1,9 @@
+import chroma from 'chroma-js'
 import {
   contrastToFontSizeArray,
   FontWeight,
   fontWeightToSize,
-} from '@/constants/apca-font-table'
-import chroma from 'chroma-js'
+} from './apca-font-table.js'
 
 export function findBestContrast(
   bg: chroma.Color,

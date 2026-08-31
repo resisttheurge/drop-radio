@@ -170,6 +170,8 @@
   },
   "workspaces": [
     "apps/*",
-    "libs/server/*"
+    "libs/server/*",
+    "libs/shared/*",
+    "libs/ui/color-palette"
   ]
 }

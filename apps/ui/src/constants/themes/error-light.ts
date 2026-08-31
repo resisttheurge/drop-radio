@@ -1,5 +1,5 @@
+import { Theme } from '@drop-radio/theme'
 import chroma from 'chroma-js'
-import { ColorTheme } from './color-theme'
 
 export const dark = false
 export const type = 'error'
@@ -23,4 +23,4 @@ export default {
   border,
   focus,
   textCandidates,
-} as ColorTheme
+} as Theme

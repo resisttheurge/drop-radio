@@ -1,4 +1,6 @@
-export interface ColorTheme {
+import chroma from 'chroma-js'
+
+export interface Theme {
   dark: boolean
   type: 'neutral' | 'success' | 'warning' | 'error'
   shadow: chroma.Color
