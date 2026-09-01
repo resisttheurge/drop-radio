@@ -17,18 +17,24 @@ jobs:
   nx-build-docker-push:
     strategy:
       matrix:
-        app: [server]
+        app: [server, ui]
+        include:
+          - app: ui
+            build-target: export
+            build-args: --platform=web --configuration=${{github.ref_name == 'main' && 'production' || 'test'}}
     uses: ./.github/workflows/docker-build-push.yml
     with:
       app: ${{ matrix.app }}
       image: drop-radio-${{ matrix.app }}
       context: apps/${{ matrix.app }}
+      nx-build-target: ${{ matrix.build-target }}
+      nx-build-args: ${{ matrix.build-args }}
 
   gcp-run-deploy:
     needs: nx-build-docker-push
     strategy:
       matrix:
-        app: [server]
+        app: [server, ui]
     uses: ./.github/workflows/gcp-run-deploy.yml
     with:
       image: drop-radio-${{ matrix.app }}:${{ github.ref_name }}
