@@ -11,7 +11,14 @@
   "nx": {
     "tags": [
       "scope:ui"
-    ]
+    ],
+    "targets": {
+      "export": {
+        "configurations": {
+          "test": {}
+        }
+      }
+    }
   },
   "dependencies": {
     "@drop-radio/theme": "*",

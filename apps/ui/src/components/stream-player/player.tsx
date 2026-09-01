@@ -9,6 +9,7 @@ import {
   useState,
 } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
+import invariant from 'tiny-invariant'
 import Neu from '../neu'
 import Control from './control'
 import { Status } from './status'
@@ -40,9 +41,12 @@ export default function StreamPlayer() {
       return () => clearTimeout(timeout)
     }
   }, [controlsActive, lastUserInteraction])
-
+  invariant(
+    process.env.EXPO_PUBLIC_STREAM_URL,
+    'EXPO_PUBLIC_STREAM_URL is not defined'
+  )
   const [audioPlayer, audioStatus] = useStream(
-    'https://server.dropradio.org/stream/live.m3u8'
+    process.env.EXPO_PUBLIC_STREAM_URL
   )
 
   const status: Status = useMemo(() => {

@@ -122,7 +122,7 @@ vitest.config.*.timestamp*
 assets/generated-docs/
 
 # Local environment files
-*.local.env
+.env*.local
 
 # Local audio input directory
 assets/drop-audio/*
