@@ -4,9 +4,6 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/ui-e2e"
-    },
-    {
       "path": "./apps/server-e2e"
     },
     {
@@ -17,9 +14,6 @@
     },
     {
       "path": "./libs/server/stream-plugin"
-    },
-    {
-      "path": "./apps/ui-old"
     },
     {
       "path": "./apps/ui"
