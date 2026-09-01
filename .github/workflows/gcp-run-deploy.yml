@@ -31,6 +31,12 @@ jobs:
           service_account: ${{ vars.GHA_CLOUD_RUN_SERVICE_ACCOUNT }}
           workload_identity_provider: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
 
+      - name: Sanitize image name
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: '\/'
+          string: ${{ inputs.image }}
+          replace-with: '-'
       - name: Deploy ${{ inputs.service }} to Cloud Run
         uses: 'google-github-actions/deploy-cloudrun@v3'
         with:
