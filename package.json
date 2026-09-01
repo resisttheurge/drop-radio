@@ -172,6 +172,6 @@
     "apps/*",
     "libs/server/*",
     "libs/shared/*",
-    "libs/ui/color-palette"
+    "libs/ui/*"
   ]
 }

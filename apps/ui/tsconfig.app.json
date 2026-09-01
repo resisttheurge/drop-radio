@@ -39,5 +39,10 @@
     "**/*.jsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
+  ],
+  "references": [
+    {
+      "path": "../../libs/shared/theme/tsconfig.lib.json"
+    }
   ]
 }
