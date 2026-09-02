@@ -13,6 +13,7 @@
   },
   "files": ["../../node_modules/@nx/expo/typings/svg.d.ts"],
   "exclude": [
+    "app.config.ts",
     "out-tsc",
     "dist",
     "**/*.test.ts",

@@ -66,6 +66,8 @@
     "@nx/react": "*",
     "@nx/rollup": "*",
     "@testing-library/react-native": "*",
+    "@types/jest": "*",
+    "@types/node": "*",
     "jest-expo": "*",
     "metro-config": "*",
     "metro-resolver": "*",
