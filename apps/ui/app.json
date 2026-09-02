@@ -30,7 +30,6 @@
       "package": "info.drop_radio.ui"
     },
     "web": {
-      "output": "static",
       "bundler": "metro"
     },
     "plugins": [
