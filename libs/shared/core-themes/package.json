@@ -1,5 +1,5 @@
 {
-  "name": "@drop-radio/theme",
+  "name": "@drop-radio/core-themes",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -16,7 +16,7 @@
     }
   },
   "nx": {
-    "sourceRoot": "libs/shared/theme/src",
+    "sourceRoot": "libs/shared/core-themes/src",
     "tags": [
       "scope:shared"
     ],
@@ -27,9 +27,9 @@
           "{options.outputPath}"
         ],
         "options": {
-          "outputPath": "libs/shared/theme/dist",
-          "main": "libs/shared/theme/src/index.ts",
-          "tsConfig": "libs/shared/theme/tsconfig.lib.json",
+          "outputPath": "libs/shared/core-themes/dist",
+          "main": "libs/shared/core-themes/src/index.ts",
+          "tsConfig": "libs/shared/core-themes/tsconfig.lib.json",
           "skipTypeCheck": true,
           "stripLeadingPaths": true
         }
@@ -37,9 +37,8 @@
     }
   },
   "dependencies": {
-    "@swc/helpers": "~0.5.18"
-  },
-  "peerDependencies": {
+    "@drop-radio/theme": "*",
+    "@swc/helpers": "~0.5.18",
     "chroma-js": "*"
   }
 }

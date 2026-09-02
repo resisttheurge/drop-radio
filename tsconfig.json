@@ -26,6 +26,21 @@
     },
     {
       "path": "./libs/ui/color-palette"
+    },
+    {
+      "path": "./libs/ui/stream-player"
+    },
+    {
+      "path": "./libs/ui/neumorphism"
+    },
+    {
+      "path": "./libs/shared/core-themes"
+    },
+    {
+      "path": "./libs/ui/theme-context"
+    },
+    {
+      "path": "./libs/ui/core-components"
     }
   ]
 }

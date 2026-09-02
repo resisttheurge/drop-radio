@@ -1,12 +1,23 @@
 {
   "extends": "../../tsconfig.base.json",
   "files": [],
-  "include": [
-    ".expo/types/**/*.ts",
-    "app.config.ts",
-    "expo-env.d.ts"
-  ],
+  "include": [".expo/types/**/*.ts", "app.config.ts", "expo-env.d.ts"],
   "references": [
+    {
+      "path": "../../libs/shared/theme"
+    },
+    {
+      "path": "../../libs/ui/theme-context"
+    },
+    {
+      "path": "../../libs/ui/stream-player"
+    },
+    {
+      "path": "../../libs/shared/core-themes"
+    },
+    {
+      "path": "../../libs/ui/core-components"
+    },
     {
       "path": "./tsconfig.app.json"
     },
