@@ -1,10 +1,12 @@
-import { ColorTheme, NeutralDarkTheme, NeutralLightTheme } from '@/constants'
-import { ColorThemeContext } from '@/hooks/use-color-theme'
 import { Slot } from 'expo-router'
 import { useMemo } from 'react'
 import { StyleSheet, useColorScheme } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import Loading from '../components/loading'
+
+import { Loading } from '@drop-radio/core-components'
+import { NeutralDarkTheme, NeutralLightTheme } from '@drop-radio/core-themes'
+import { Theme } from '@drop-radio/theme'
+import { ThemeContext } from '@drop-radio/theme-context'
 
 export function SuspenseFallback() {
   const colorScheme = useColorScheme()
@@ -14,13 +16,13 @@ export function SuspenseFallback() {
   )
   const styles = useMemo(() => themedStyles(theme), [theme])
   return (
-    <ColorThemeContext value={theme}>
+    <ThemeContext value={theme}>
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
           <Loading />
         </SafeAreaView>
       </SafeAreaProvider>
-    </ColorThemeContext>
+    </ThemeContext>
   )
 }
 
@@ -32,17 +34,17 @@ export default function RootLayout() {
   )
   const styles = useMemo(() => themedStyles(theme), [theme])
   return (
-    <ColorThemeContext value={theme}>
+    <ThemeContext value={theme}>
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
           <Slot />
         </SafeAreaView>
       </SafeAreaProvider>
-    </ColorThemeContext>
+    </ThemeContext>
   )
 }
 
-function themedStyles(theme: ColorTheme) {
+function themedStyles(theme: Theme) {
   return StyleSheet.create({
     container: {
       ...StyleSheet.absoluteFillObject,

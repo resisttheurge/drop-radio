@@ -43,7 +43,19 @@
   ],
   "references": [
     {
+      "path": "../../libs/ui/theme-context/tsconfig.lib.json"
+    },
+    {
       "path": "../../libs/shared/theme/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/ui/stream-player/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/shared/core-themes/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/ui/core-components/tsconfig.lib.json"
     }
   ]
 }

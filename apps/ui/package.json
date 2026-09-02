@@ -21,7 +21,11 @@
     }
   },
   "dependencies": {
+    "@drop-radio/core-components": "*",
+    "@drop-radio/core-themes": "*",
+    "@drop-radio/stream-player": "*",
     "@drop-radio/theme": "*",
+    "@drop-radio/theme-context": "*",
     "@expo/metro-config": "*",
     "@react-navigation/native": "*",
     "@shopify/react-native-skia": "*",

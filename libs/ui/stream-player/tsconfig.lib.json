@@ -30,6 +30,9 @@
   "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
   "references": [
     {
+      "path": "../core-components/tsconfig.lib.json"
+    },
+    {
       "path": "../neumorphism/tsconfig.lib.json"
     }
   ]

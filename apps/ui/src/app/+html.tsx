@@ -1,7 +1,8 @@
-import { NeutralDarkTheme, NeutralLightTheme } from '@/constants'
 import { ScrollViewStyleReset } from 'expo-router/html'
 import { useMemo, type PropsWithChildren } from 'react'
 import { useColorScheme } from 'react-native'
+
+import { NeutralDarkTheme, NeutralLightTheme } from '@drop-radio/core-themes'
 
 // This file is web-only and used to configure the root HTML for every
 // web page during static rendering.
