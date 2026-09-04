@@ -1,6 +1,7 @@
-import { findBestContrastForFontSizeAndWeight } from '@drop-radio/color'
 import chroma from 'chroma-js'
 import { StyleSheet, Text, View } from 'react-native'
+
+import { findBestContrastForFontSizeAndWeight } from '@drop-radio/color'
 
 export default function ColorChip({
   color,

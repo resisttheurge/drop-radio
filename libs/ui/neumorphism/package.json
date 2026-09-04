@@ -18,12 +18,13 @@
   },
   "dependencies": {
     "@drop-radio/core-themes": "*",
-    "@drop-radio/theme": "*"
+    "@drop-radio/theme": "*",
+    "react-native-reanimated": "*",
+    "react-native-worklets": "*"
   },
   "peerDependencies": {
     "expo-linear-gradient": "*",
-    "react": "^19.1.0",
-    "react-native": "0.81.5",
-    "react-native-reanimated": "*"
+    "react": "*",
+    "react-native": "*"
   }
 }

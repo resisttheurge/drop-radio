@@ -6,10 +6,7 @@
     "rootDir": "src",
     "jsx": "react-jsx",
     "noUnusedLocals": false,
-    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
   },
   "files": ["../../node_modules/@nx/expo/typings/svg.d.ts"],
   "exclude": [
@@ -50,6 +47,9 @@
     },
     {
       "path": "../../libs/ui/stream-player/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/ui/neumorphism/tsconfig.lib.json"
     },
     {
       "path": "../../libs/shared/core-themes/tsconfig.lib.json"

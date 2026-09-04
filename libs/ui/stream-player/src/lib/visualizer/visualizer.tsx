@@ -1,9 +1,10 @@
-import { useTheme } from '@react-navigation/native'
 import { Canvas } from '@shopify/react-native-skia'
 import { useAudioPlayerStatus } from 'expo-audio'
 import { useMemo } from 'react'
 import { Pressable } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
+
+import { useTheme } from '@drop-radio/theme-context'
 
 import { SpinningMan } from '../visualizations'
 import { VisualizerProps } from './props'
@@ -13,7 +14,6 @@ export function Visualizer({
   player,
 }: VisualizerProps) {
   const theme = useTheme()
-  const { colors } = theme
   const canvasSize = useSharedValue({ width: 0, height: 0 })
   const Viz = useMemo(() => {
     switch (visualization) {
@@ -44,7 +44,7 @@ export function Visualizer({
       <Canvas
         style={{
           flex: 1,
-          backgroundColor: colors.background,
+          backgroundColor: theme.form.css(),
         }}
         onSize={canvasSize}
       >

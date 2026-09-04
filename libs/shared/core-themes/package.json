@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@drop-radio/theme": "*",
-    "@swc/helpers": "~0.5.18",
+    "@swc/helpers": "*",
     "chroma-js": "*"
   }
 }

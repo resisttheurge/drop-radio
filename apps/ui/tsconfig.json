@@ -4,13 +4,16 @@
   "include": [".expo/types/**/*.ts", "app.config.ts", "expo-env.d.ts"],
   "references": [
     {
-      "path": "../../libs/shared/theme"
-    },
-    {
       "path": "../../libs/ui/theme-context"
     },
     {
+      "path": "../../libs/shared/theme"
+    },
+    {
       "path": "../../libs/ui/stream-player"
+    },
+    {
+      "path": "../../libs/ui/neumorphism"
     },
     {
       "path": "../../libs/shared/core-themes"

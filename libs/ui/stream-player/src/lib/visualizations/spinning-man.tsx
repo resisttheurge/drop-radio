@@ -14,6 +14,8 @@ import {
   withTiming,
 } from 'react-native-reanimated'
 
+import { defaultTextAndBackground } from '@drop-radio/theme'
+
 import { VisualizationProps } from './Visualization'
 
 export interface FallingMenProps {
@@ -70,7 +72,7 @@ export function FallingMen({
 }
 
 export function SpinningMan({ player, theme, canvasSize }: VisualizationProps) {
-  const { colors } = theme
+  const { text, background } = defaultTextAndBackground(theme)
   const rpm = useSharedValue(0)
   const rotation = useSharedValue(0)
   const status = useAudioPlayerStatus(player)
@@ -144,8 +146,8 @@ export function SpinningMan({ player, theme, canvasSize }: VisualizationProps) {
       <FallingMen
         count={20}
         degrees={5}
-        fgColor={colors.text}
-        bgColor={colors.card}
+        fgColor={text.css()}
+        bgColor={background.css()}
       />
     </Group>
   )

@@ -7,7 +7,7 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import { NeutralDarkTheme } from '@drop-radio/core-themes'
-import { Theme } from '@drop-radio/theme'
+import { textForBackground, Theme } from '@drop-radio/theme'
 
 export const AnimatedLinearGradient = createAnimatedComponent(LinearGradient)
 
@@ -140,17 +140,22 @@ export function useNeuStyles(
   curvature: Curvature,
   extrude: boolean
 ) {
+  const textColor = useMemo(
+    () => textForBackground(theme, backgroundColor),
+    [theme, backgroundColor]
+  )
   const { container } = useMemo(
     () =>
       StyleSheet.create({
         container: {
+          color: textColor.css(),
           backgroundColor: backgroundColor.css(),
           padding: intensity * 2,
           margin: intensity * 2,
           borderRadius: intensity * 2,
         },
       }),
-    [backgroundColor, intensity]
+    [backgroundColor, textColor, intensity]
   )
   const outerShadows: BoxShadowProps[] = useMemo(() => {
     if (extrude) {

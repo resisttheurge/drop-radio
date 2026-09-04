@@ -37,9 +37,8 @@
     }
   },
   "dependencies": {
-    "@swc/helpers": "~0.5.18"
-  },
-  "peerDependencies": {
+    "@drop-radio/color": "*",
+    "@swc/helpers": "*",
     "chroma-js": "*"
   }
 }

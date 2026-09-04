@@ -1,6 +1,8 @@
-import { Loading } from '@drop-radio/core-components'
 import { WithSkiaWeb } from '@shopify/react-native-skia/lib/module/web'
 import { useCallback } from 'react'
+
+import { Loading } from '@drop-radio/core-components'
+
 import { type VisualizerProps } from './props'
 
 export * from './props'

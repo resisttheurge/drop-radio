@@ -1,5 +1,6 @@
 import chroma from 'chroma-js'
 import { StyleSheet, View } from 'react-native'
+
 import ColorSwatch from './swatch'
 
 export interface ColorPaletteProps {

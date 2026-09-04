@@ -17,12 +17,22 @@
         "configurations": {
           "test": {}
         }
+      },
+      "start": {
+        "executor": "@nx/expo:start",
+        "dependsOn": [
+          "^build"
+        ],
+        "options": {
+          "port": 8081
+        }
       }
     }
   },
   "dependencies": {
     "@drop-radio/core-components": "*",
     "@drop-radio/core-themes": "*",
+    "@drop-radio/neumorphism": "*",
     "@drop-radio/stream-player": "*",
     "@drop-radio/theme": "*",
     "@drop-radio/theme-context": "*",
@@ -59,7 +69,9 @@
     "tiny-invariant": "*",
     "expo-linear-gradient": "*",
     "@expo/vector-icons": "*",
-    "expo-video": "*"
+    "expo-video": "*",
+    "jsonc-eslint-parser": "*",
+    "@swc/helpers": "*"
   },
   "devDependencies": {
     "@nx/detox": "*",

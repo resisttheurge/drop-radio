@@ -1,6 +1,7 @@
-import { Theme } from '@react-navigation/native'
 import { AudioPlayer } from 'expo-audio'
 import { SharedValue } from 'react-native-reanimated'
+
+import { Theme } from '@drop-radio/theme'
 
 export interface VisualizationProps {
   player: AudioPlayer

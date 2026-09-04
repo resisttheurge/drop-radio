@@ -33,6 +33,12 @@
       "path": "../core-components/tsconfig.lib.json"
     },
     {
+      "path": "../theme-context/tsconfig.lib.json"
+    },
+    {
+      "path": "../../shared/theme/tsconfig.lib.json"
+    },
+    {
       "path": "../neumorphism/tsconfig.lib.json"
     }
   ]
