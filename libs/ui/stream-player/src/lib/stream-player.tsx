@@ -54,11 +54,11 @@ export function StreamPlayer({ streamUrl, video }: StreamPlayerProps) {
     if (audioStatus.playing) {
       return 'playing'
     }
-    if (!audioStatus.isBuffering && audioStatus.isLoaded) {
+    if (audioStatus.isLoaded) {
       return 'paused'
     }
     return 'waiting'
-  }, [audioStatus.playing, audioStatus.isBuffering, audioStatus.isLoaded])
+  }, [audioStatus])
 
   const videoPlayer = useVideoPlayer(video, (player) => {
     player.volume = 0
@@ -70,6 +70,7 @@ export function StreamPlayer({ streamUrl, video }: StreamPlayerProps) {
     if (audioStatus.playing) {
       audioPlayer.pause()
     } else {
+      audioPlayer.seekTo(0)
       audioPlayer.play()
       videoPlayer.play()
     }

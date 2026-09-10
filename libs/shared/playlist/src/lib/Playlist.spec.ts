@@ -1,6 +1,6 @@
-import { it, fc } from '@fast-check/jest'
+import { fc, it } from '@fast-check/vitest'
 
-import { Playlist, PlaylistEntry } from './Playlist'
+import { Playlist, PlaylistEntry } from './Playlist.js'
 
 describe('Playlist', () => {
   it.prop([arbPlaylist()])(

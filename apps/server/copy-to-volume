@@ -1,0 +1,23 @@
+#!/bin/sh
+# Usage: copy_to_volume SRC_PATH DEST_VOLUME_NAME [DEST_PATH]
+copy_to_volume() {
+  SRC_PATH=$1
+  DEST_VOLUME_NAME=$2
+  # create smallest Docker image possible
+  echo 'FROM scratch\nLABEL empty=""' | docker build -t empty -
+  # create temporary container to be able to mount volume
+  CONTAINER_ID=$(docker container create -v "${DEST_VOLUME_NAME}":/data empty cmd)
+  # copy files to volume
+  if [ -f SRC_PATH ] ; then
+    docker cp "${SRC_PATH}" "${CONTAINER_ID}":"/data/"
+  else
+    for file in $SRC_PATH/*; do
+      docker cp "${file}" "${CONTAINER_ID}":"/data/"
+    done
+  fi
+  
+  # remove temporary container
+  docker rm "${CONTAINER_ID}"
+}
+
+copy_to_volume $1 $2 ${3:-}

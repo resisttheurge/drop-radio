@@ -81,16 +81,35 @@
       "plugin": "@nx/expo/plugin",
       "options": {
         "startTargetName": "start",
-        "buildTargetName": "build",
-        "prebuildTargetName": "prebuild",
+        "buildTargetName": "build-native",
+        "prebuildTargetName": "prebuild-native",
         "serveTargetName": "serve",
         "installTargetName": "install",
-        "exportTargetName": "export",
+        "exportTargetName": "build",
         "submitTargetName": "submit",
         "runIosTargetName": "run-ios",
         "runAndroidTargetName": "run-android",
         "buildDepsTargetName": "build-deps",
         "watchDepsTargetName": "watch-deps"
+      }
+    },
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testTargetName": "test",
+        "ciTargetName": "test-ci",
+        "testMode": "watch"
+      }
+    },
+    {
+      "plugin": "@nx/docker",
+      "options": {
+        "buildTarget": {
+          "name": "docker:build"
+        },
+        "runTarget": {
+          "name": "docker:run"
+        }
       }
     }
   ],

@@ -1,4 +1,4 @@
-import { Playlist } from './Playlist'
+import { Playlist } from './Playlist.js'
 
 export interface Progress {
   readonly loop: number

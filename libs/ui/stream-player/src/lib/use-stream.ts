@@ -26,7 +26,9 @@ export default function useStream(
     ...defaultAudioPlayerOptions,
     ...audioPlayerOptions,
   })
+
   const audioStatus = useAudioPlayerStatus(audioPlayer)
+
   useEffect(() => {
     switch (audioStatus.playbackState) {
       case 'waiting':
@@ -41,10 +43,6 @@ export default function useStream(
         console.log('Audio paused')
         break
     }
-  }, [
-    audioStatus.playbackState,
-    audioStatus.reasonForWaitingToPlay,
-    audioStatus.currentTime,
-  ])
+  }, [audioStatus])
   return [audioPlayer, audioStatus]
 }

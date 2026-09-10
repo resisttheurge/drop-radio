@@ -2,8 +2,7 @@ import fs from 'node:fs/promises'
 import { resolve } from 'node:path'
 
 import { ffprobeFormat } from '@drop-radio/ffmpeg'
-
-import { Playlist, PlaylistEntry } from './Playlist'
+import { Playlist, PlaylistEntry } from '@drop-radio/playlist'
 
 export async function readPlaylistFromDirectory(
   directory: string,

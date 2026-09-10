@@ -1,7 +1,8 @@
 {
-  "name": "@drop-radio/stream-plugin",
+  "name": "@drop-radio/playlist",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,8 +16,9 @@
     }
   },
   "nx": {
+    "sourceRoot": "libs/shared/playlist/src",
     "tags": [
-      "scope:server"
+      "scope:shared"
     ],
     "targets": {
       "build": {
@@ -25,26 +27,21 @@
           "{options.outputPath}"
         ],
         "options": {
-          "outputPath": "libs/server/stream-plugin/dist",
-          "tsConfig": "libs/server/stream-plugin/tsconfig.lib.json",
-          "packageJson": "libs/server/stream-plugin/package.json",
-          "main": "libs/server/stream-plugin/src/index.ts",
+          "outputPath": "libs/shared/playlist/dist",
+          "main": "libs/shared/playlist/src/index.ts",
+          "tsConfig": "libs/shared/playlist/tsconfig.lib.json",
+          "skipTypeCheck": true,
           "stripLeadingPaths": true
         }
       }
     }
   },
   "dependencies": {
-    "@drop-radio/ffmpeg": "*",
-    "@drop-radio/playlist": "*",
-    "@fastify/static": "*",
-    "@js-temporal/polyfill": "*",
     "@swc/helpers": "*",
-    "fastify-plugin": "*",
-    "rxjs": "*",
     "tiny-invariant": "*"
   },
-  "peerDependencies": {
-    "fastify": "*"
+  "devDependencies": {
+    "@fast-check/vitest": "*",
+    "vitest": "*"
   }
 }

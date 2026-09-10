@@ -13,14 +13,13 @@ import {
   timer,
 } from 'rxjs'
 
-import { hlsStream } from '@drop-radio/ffmpeg'
+import { hlsStream, HLSStreamOptions } from '@drop-radio/ffmpeg'
+import { Playlist, Progress } from '@drop-radio/playlist'
 
 import startInstantPlugin from '../start-instant-plugin'
 import { cleanupStreamFiles } from './cleanupStreamFiles'
 import { convertPlaylistProgress } from './convertPlaylistProgress'
 import { createMetaPlaylistFile } from './createMetaPlaylistFile'
-import { Playlist } from './Playlist'
-import { Progress } from './Progress'
 import { readPlaylistFromDirectory } from './readPlaylistFromDir'
 import { writePlaylistToFile } from './writePlaylistToFile'
 
@@ -34,6 +33,7 @@ export interface StreamOptions {
   readonly fileExtension: string
   readonly inputDirectory: string
   readonly outputDirectory: string
+  readonly hlsOptions: HLSStreamOptions
   readonly start?: string
 }
 
@@ -50,7 +50,7 @@ export interface StreamDecorations {
 
 const streamPlugin: FastifyPluginAsync<StreamOptions> = async (
   fastify,
-  { fileExtension, inputDirectory, outputDirectory, start }
+  { fileExtension, inputDirectory, outputDirectory, hlsOptions, start }
 ) => {
   const absInDir = path.resolve(inputDirectory)
   const absOutDir = path.resolve(outputDirectory)
@@ -108,9 +108,24 @@ const streamPlugin: FastifyPluginAsync<StreamOptions> = async (
   await cleanupStreamFiles(fastify.stream.outputDirectory)
   await createMetaPlaylistFile(absMetaPlaylistFile, absPlaylistFile)
 
+  fastify.get('/playlist', async (request, reply) => {
+    reply.send(fastify.stream.playlist)
+  })
+
   fastify.get('/progress', async (request, reply) => {
     const progress = await firstValueFrom(fastify.stream.progress)
     reply.send(progress)
+  })
+
+  fastify.get('/ready', async (request, reply) => {
+    if (
+      fastify.stream.subscription !== undefined &&
+      !fastify.stream.subscription.closed
+    ) {
+      reply.code(200).send(true)
+    } else {
+      reply.code(503).send(false)
+    }
   })
 
   fastify.register(staticPlugin, {
@@ -144,13 +159,8 @@ const streamPlugin: FastifyPluginAsync<StreamOptions> = async (
       {
         concat: true,
         loopCount: -1,
-        segmentDuration: 1,
-        segmentCount: 12,
-        formats: [
-          { name: 'high', bitrate: '640k', sampleRate: '48k' },
-          { name: 'low', bitrate: '32k', sampleRate: '12k' },
-        ],
         masterPlaylistName: 'live',
+        ...hlsOptions,
       }
     )
       .pipe(

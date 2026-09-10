@@ -13,7 +13,11 @@
       "scope:ui"
     ],
     "targets": {
-      "export": {
+      "build": {
+        "options": {
+          "platform": "web",
+          "clear": false
+        },
         "configurations": {
           "test": {}
         }
@@ -21,11 +25,44 @@
       "start": {
         "executor": "@nx/expo:start",
         "dependsOn": [
+          "@drop-radio/server:serve",
           "^build"
         ],
         "options": {
-          "port": 8081
+          "port": 8081,
+          "clear": false
         }
+      },
+      "serve": {
+        "dependsOn": [
+          "@drop-radio/server:serve",
+          "^build"
+        ],
+        "options": {
+          "port": 8081,
+          "clear": false
+        }
+      },
+      "test": {
+        "options": {
+          "passWithNoTests": true
+        }
+      },
+      "docker:build": {
+        "dependsOn": [
+          "build"
+        ]
+      },
+      "docker:run": {
+        "options": {
+          "rm": "true",
+          "publish": "8081:80"
+        },
+        "continuous": true,
+        "dependsOn": [
+          "docker:build",
+          "@drop-radio/server:docker:run"
+        ]
       }
     }
   },
@@ -33,6 +70,7 @@
     "@drop-radio/core-components": "*",
     "@drop-radio/core-themes": "*",
     "@drop-radio/neumorphism": "*",
+    "@drop-radio/playlist": "*",
     "@drop-radio/stream-player": "*",
     "@drop-radio/theme": "*",
     "@drop-radio/theme-context": "*",
