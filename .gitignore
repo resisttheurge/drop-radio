@@ -122,7 +122,7 @@ vitest.config.*.timestamp*
 assets/generated-docs/
 
 # Local environment files
-*.local.env
+.env*.local
 
 # Local audio input directory
 assets/drop-audio/*
@@ -132,3 +132,18 @@ assets/drop-audio/*
 assets/drop-stream/*
 !assets/drop-stream/.gitkeep
 .nx/polygraph
+
+# Expo
+node_modules/
+.expo/
+.yarn/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+cache/

@@ -1,4 +1,81 @@
 {
-  "name": "Ui",
-  "displayName": "Ui"
+  "expo": {
+    "name": "Drop Radio",
+    "slug": "drop-radio-ui",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "drop-radio-ui",
+    "userInterfaceStyle": "automatic",
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": false
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "info.drop-radio.ui",
+      "icon": {
+        "light": "./assets/images/light-icon.png",
+        "dark": "./assets/images/dark-icon.png",
+        "tinted": "./assets/images/tinted-icon-ios.png"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon-android-fg.png",
+        "backgroundImage": "./assets/images/adaptive-icon-android-bg.png",
+        "monochromeImage": "./assets/images/monochrome-icon-android.png"
+      },
+      "edgeToEdgeEnabled": true,
+      "permissions": ["android.permission.MODIFY_AUDIO_SETTINGS"],
+      "package": "info.drop_radio.ui"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "root": "./apps/ui/src/app"
+        }
+      ],
+      [
+        "expo-asset",
+        {
+          "assets": [
+            "./assets/images/spinner_light.png",
+            "./assets/images/spinner_dark.png",
+            "./assets/movies/the-move.mp4"
+          ]
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-screen-light.png",
+          "imageWidth": 512,
+          "resizeMode": "contain",
+          "backgroundColor": "#f2f2f3",
+          "dark": {
+            "image": "./assets/images/splash-screen-dark.png",
+            "backgroundColor": "#333133"
+          }
+        }
+      ]
+    ]
+  }
 }

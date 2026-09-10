@@ -4,12 +4,6 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/ui-e2e"
-    },
-    {
-      "path": "./apps/ui"
-    },
-    {
       "path": "./apps/server-e2e"
     },
     {
@@ -20,6 +14,36 @@
     },
     {
       "path": "./libs/server/stream-plugin"
+    },
+    {
+      "path": "./apps/ui"
+    },
+    {
+      "path": "./libs/shared/color"
+    },
+    {
+      "path": "./libs/shared/theme"
+    },
+    {
+      "path": "./libs/ui/color-palette"
+    },
+    {
+      "path": "./libs/ui/stream-player"
+    },
+    {
+      "path": "./libs/ui/neumorphism"
+    },
+    {
+      "path": "./libs/shared/core-themes"
+    },
+    {
+      "path": "./libs/ui/theme-context"
+    },
+    {
+      "path": "./libs/ui/core-components"
+    },
+    {
+      "path": "./libs/shared/playlist"
     }
   ]
 }
