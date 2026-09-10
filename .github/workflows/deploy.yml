@@ -21,9 +21,6 @@ jobs:
         include:
           - build-target: build
             build-args: --configuration=${{github.ref_name == 'main' && 'production' || 'test'}}
-          - app: ui
-            build-target: export
-            build-args: --platform=web --configuration=${{github.ref_name == 'main' && 'production' || 'test'}}
     uses: ./.github/workflows/docker-build-push.yml
     with:
       app: ${{ matrix.app }}
