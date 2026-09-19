@@ -13,6 +13,9 @@
       "path": "../../libs/ui/stream-player"
     },
     {
+      "path": "../../libs/shared/playlist"
+    },
+    {
       "path": "../../libs/ui/neumorphism"
     },
     {

@@ -49,6 +49,9 @@
       "path": "../../libs/ui/stream-player/tsconfig.lib.json"
     },
     {
+      "path": "../../libs/shared/playlist/tsconfig.lib.json"
+    },
+    {
       "path": "../../libs/ui/neumorphism/tsconfig.lib.json"
     },
     {

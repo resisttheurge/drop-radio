@@ -1,16 +1,17 @@
 import nx from '@nx/eslint-plugin'
 import jest from 'eslint-plugin-jest'
-import tsdoc from 'eslint-plugin-tsdoc'
+import typedoc from 'eslint-plugin-typedoc'
 
 export default [
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
   jest.configs['flat/recommended'],
+  typedoc.configs.recommended,
   {
     plugins: {
-      tsdoc,
       jest,
+      typedoc,
     },
   },
   {
@@ -24,7 +25,6 @@ export default [
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     rules: {
-      'tsdoc/syntax': 'warn',
       '@nx/enforce-module-boundaries': [
         'error',
         {

@@ -1,7 +1,7 @@
 /**
  * Represents the output of ffmpeg with the `-progress` option
  */
-export interface HLSStreamProgress {
+export interface FFMPEGProgress {
   /**
    * The bitrate of the stream, in bits per second (e.g., `128k` or `1.53M`).
    * For HLS streams with multiple formats, will be `'N/A'`
@@ -48,7 +48,7 @@ export interface HLSStreamProgress {
   readonly progress: 'continue' | 'end'
 }
 
-export function parseHLSStreamProgress(data: string): HLSStreamProgress {
+export function parseFFMPEGProgress(data: string | Buffer): FFMPEGProgress {
   let bitrate = 'N/A'
   let total_size = 'N/A'
   let out_time_us = 'N/A'
@@ -57,7 +57,7 @@ export function parseHLSStreamProgress(data: string): HLSStreamProgress {
   let speed = '0.0x'
   let progress: 'continue' | 'end' = 'continue'
 
-  data.split('\n').forEach((line) => {
+  data.toString().split('\n').forEach((line) => {
     const splitPoint = line.indexOf('=')
     if (splitPoint !== -1) {
       const key = line.slice(0, splitPoint)

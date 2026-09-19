@@ -50,6 +50,7 @@
         "executor": "@nx/js:node",
         "defaultConfiguration": "development",
         "dependsOn": [
+          "@drop-radio/server-proxy:docker:run",
           "^build"
         ],
         "options": {
@@ -81,7 +82,6 @@
       },
       "docker:run": {
         "options": {
-          "rm": true,
           "publish": "8080:80",
           "volume": "drop-audio:/app/input"
         },

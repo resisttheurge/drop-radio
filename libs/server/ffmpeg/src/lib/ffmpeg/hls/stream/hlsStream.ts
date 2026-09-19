@@ -3,7 +3,7 @@ import { Observable } from 'rxjs'
 
 import { HLSStreamError } from './HLSStreamError'
 import { HLS_STREAM_DEFAULTS, HLSStreamOptions } from './HLSStreamOptions'
-import { HLSStreamProgress, parseHLSStreamProgress } from './HLSStreamProgress'
+import { FFMPEGProgress, FFMPEGStreamProgress } from '../../FFMPEGProgress'
 
 /**
  * Creates an observable that generates HLS playlist and segment files from a
