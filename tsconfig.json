@@ -47,6 +47,18 @@
     },
     {
       "path": "./libs/server/rx-process"
+    },
+    {
+      "path": "./libs/server/fastify-plugin-stream"
+    },
+    {
+      "path": "./libs/server/fastify-plugin-playlist"
+    },
+    {
+      "path": "./libs/server/fastify-plugin-library"
+    },
+    {
+      "path": "./libs/server/fastify-plugin-channel"
     }
   ]
 }
