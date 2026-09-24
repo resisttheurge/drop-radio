@@ -36,7 +36,8 @@
   },
   "dependencies": {
     "@drop-radio/rx-process": "*",
-    "@swc/helpers": "*"
+    "@swc/helpers": "*",
+    "fluent-json-schema": "*"
   },
   "peerDependencies": {
     "rxjs": "*"

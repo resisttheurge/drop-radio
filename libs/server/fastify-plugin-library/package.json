@@ -21,12 +21,11 @@
   },
   "dependencies": {
     "@drop-radio/ffmpeg": "*",
-    "@drop-radio/rx-fs": "*",
     "@js-temporal/polyfill": "*",
     "fastify-plugin": "*",
+    "fluent-json-schema": "*",
     "tiny-invariant": "*",
-    "tslib": "*",
-    "xxhash-wasm": "*"
+    "tslib": "*"
   },
   "peerDependencies": {
     "fastify": "*",

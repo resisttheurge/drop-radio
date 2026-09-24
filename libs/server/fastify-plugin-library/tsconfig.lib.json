@@ -12,9 +12,6 @@
   "include": ["src/**/*.ts"],
   "references": [
     {
-      "path": "../rx-fs/tsconfig.lib.json"
-    },
-    {
       "path": "../ffmpeg/tsconfig.lib.json"
     }
   ],
