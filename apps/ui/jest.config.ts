@@ -1,22 +1,10 @@
-module.exports = {
+export default {
   displayName: '@drop-radio/ui',
-  preset: 'react-native',
-  resolver: '@nx/jest/plugins/resolver',
-  moduleFileExtensions: ['ts', 'js', 'html', 'tsx', 'jsx'],
+  preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  moduleNameMapper: {
-    '\\.svg$': '@nx/react-native/plugins/jest/svg-mock',
-  },
   transform: {
-    '^.+.(js|ts|tsx)$': [
-      'babel-jest',
-      {
-        configFile: __dirname + '/.babelrc.js',
-      },
-    ],
-    '^.+.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$': require.resolve(
-      'react-native/jest/assetFileTransformer.js'
-    ),
+    '^.+\\.[tj]sx?$': 'babel-jest',
   },
-  coverageDirectory: '../../coverage/apps/ui',
-};
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
+  coverageDirectory: 'test-output/jest/coverage',
+}

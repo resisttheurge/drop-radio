@@ -20,7 +20,7 @@
           "passWithNoTests": true
         },
         "dependsOn": [
-          "@drop-radio/server:docker-run"
+          "@drop-radio/server:docker:run"
         ]
       }
     }

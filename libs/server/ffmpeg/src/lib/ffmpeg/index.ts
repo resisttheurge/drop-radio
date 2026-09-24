@@ -1,8 +1,5 @@
-export { hlsStream } from './hlsStream'
-export * from './HLSStreamError'
-export {
-  type HLSStreamFormat,
-  type HLSStreamOptions,
-  HLS_STREAM_DEFAULTS,
-} from './HLSStreamOptions'
-export { type HLSStreamProgress } from './HLSStreamProgress'
+export * as hls from './hls'
+export * as rtmp from './rtmp'
+
+export { FFMPEG_DEFAULTS, type FFMPEGOptions } from './FFMPEGOptions'
+export { type FFMPEGProgress } from './FFMPEGProgress'

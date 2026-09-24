@@ -1,5 +1,5 @@
-import nx from '@nx/eslint-plugin';
-import baseConfig from '../../eslint.config.mjs';
+import nx from '@nx/eslint-plugin'
+import baseConfig from '../../eslint.config.mjs'
 
 export default [
   ...baseConfig,
@@ -10,6 +10,6 @@ export default [
     rules: {},
   },
   {
-    ignores: ['public', '.cache', 'node_modules'],
+    ignores: ['.expo', 'web-build', 'cache', 'dist', '**/out-tsc'],
   },
-];
+]

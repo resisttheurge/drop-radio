@@ -2,8 +2,7 @@ import { map, OperatorFunction } from 'rxjs'
 
 import { HLSStreamProgress } from '@drop-radio/ffmpeg'
 
-import { Playlist } from './Playlist'
-import { Progress } from './Progress'
+import { Playlist, Progress } from '@drop-radio/playlist'
 
 export function convertPlaylistProgress(
   playlist: Playlist,
