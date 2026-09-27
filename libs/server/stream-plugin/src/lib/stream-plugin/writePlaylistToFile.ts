@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
-
-import { Playlist } from './Playlist'
 import invariant from 'tiny-invariant'
+
+import Playlist from '@drop-radio/playlist'
 
 export async function writePlaylistToFile(
   playlist: Playlist,

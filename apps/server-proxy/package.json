@@ -1,0 +1,13 @@
+{
+  "name": "@drop-radio/server-proxy",
+  "nx": {
+    "tags":["scope:server"],
+    "targets": {
+      "docker:run": {
+        "options": {
+          "publish": "8081:80,1935:1935"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "@drop-radio/rx-process",
+  "version": "0.0.1",
+  "description": "Reactive extensions for node:child_process",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "nx": {
+    "tags": [
+      "scope:server"
+    ]
+  },
+  "dependencies": {
+    "tslib": "*"
+  },
+  "devDependencies": {
+    "@fast-check/jest": "*",
+    "es-toolkit": "*"
+  },
+  "peerDependencies": {
+    "rxjs": "*"
+  }
+}

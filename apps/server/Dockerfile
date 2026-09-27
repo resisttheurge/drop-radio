@@ -2,9 +2,9 @@ FROM docker.io/node:lts-alpine
 LABEL org.opencontainers.image.source="https://github.com/resisttheurge/drop-radio"
 LABEL org.opencontainers.image.description="Drop Radio Server Docker Image"
 
-# install ffmpeg
+# install ffmpeg and xxhash
 RUN apk upgrade -U \ 
-    && apk add ca-certificates ffmpeg libva-intel-driver \
+    && apk add ca-certificates ffmpeg libva-intel-driver xxhash \
     && rm -rf /var/cache/*
 
 WORKDIR /app
