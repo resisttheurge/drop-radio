@@ -59,6 +59,9 @@
     },
     {
       "path": "./libs/server/fastify-plugin-channel"
+    },
+    {
+      "path": "./libs/server/fastify-plugin-redux"
     }
   ]
 }

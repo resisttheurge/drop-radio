@@ -28,7 +28,7 @@ export const libraryPlugin: FastifyPluginAsync<LibraryOptions> = async (
       live,
     }
     fastify.addHook('onRegister', async () => {
-      fastify.sche
+      
     })
   } catch (error) {
     fastify.log.error(error, 'uncaught error while initializing library plugin')

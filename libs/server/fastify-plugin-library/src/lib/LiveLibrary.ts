@@ -16,5 +16,10 @@ export const schema: ObjectSchema<LiveLibrarySnapshot> = S.object()
   .id('https://schema.dropradio.info/library')
   .title('drop radio live library')
   .prop('status', S.string().enum(Object.values(LibraryStatus)))
+  .prop('content', LibraryContent.schema)
   .prop('errorLog', S.array())
   .required(['status', 'errorLog'])
+
+export const LiveLibrary = {
+  schema
+}

@@ -3,39 +3,47 @@
  * @see {@link FFMPEG_DEFAULTS} for default options.
  */
 export interface FFMPEGOptions {
-  banner?: boolean
+  hide_banner?: boolean
+  progress?: 'pipe:1' | 'pipe:2' | string
   stats?: boolean
-  progress?: boolean
-  live?: boolean
+  stats_period?: number
 }
 
-export function getFFMPEGArgs({banner, stats, progress, live}: FFMPEGOptions): string[] {
+export type FFMPEGOption<K extends keyof FFMPEGOptions = keyof FFMPEGOptions> =
+  [K, FFMPEGOptions[K]]
+
+export function getFFMPEGArgs({
+  hide_banner,
+  progress,
+  stats,
+  stats_period,
+}: FFMPEGOptions): string[] {
   const result: string[] = []
-  if (!banner) {
+  if (hide_banner) {
     result.push('-hide_banner')
   }
   if (!stats) {
     result.push('-nostats')
   }
   if (progress) {
-    result.push('-progress', 'pipe:1')
+    result.push('-progress', progress)
   }
-  if (live) {
-    result.push('-re')
+  if (stats_period) {
+    result.push('-stats_period', stats_period.toString())
   }
   return result
 }
 
 /**
- * Default options ({@link FFMPEGPublishOptions}) for FFMEPG processes.
+ * Default options ({@link FFMPEGOptions}) for FFMEPG processes.
  *
- * {@includeCode FFMPEGPublishOptions.ts#FFMPEG_DEFAULTS}
+ * {@includeCode FFMPEGOptions.ts#FFMPEG_DEFAULTS}
  */
 // #region FFMPEG_DEFAULTS
 export const FFMPEG_DEFAULTS: Required<FFMPEGOptions> = {
-  banner: false,
+  hide_banner: true,
+  progress: 'pipe:1',
   stats: false,
-  progress: false,
-  live: false
+  stats_period: 0.5,
 }
 // #endregion FFMPEG_DEFAULTS
