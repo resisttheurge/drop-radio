@@ -5,7 +5,9 @@
     "jsx": "react-jsx",
     "types": ["jest", "node"],
     "noUnusedLocals": false,
-    "lib": ["dom"]
+    "lib": ["dom"],
+    "ignoreDeprecations": "6.0",
+    "rootDir": "."
   },
   "files": ["src/test-setup.ts"],
   "include": [
