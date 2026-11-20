@@ -5,7 +5,7 @@
   "scripts": {
     "sync-audio": "gcloud storage rsync gs://drop-audio assets/drop-audio --recursive --delete-unmatched-destination-objects --exclude=.gitkeep",
     "docs": "typedoc --options typedoc.config.mjs",
-    "ci": "npx nx affected -t lint test build docs e2e -c=test"
+    "ci": "nx affected -t lint test build docs e2e -c=test"
   },
   "private": true,
   "nx": {
@@ -126,5 +126,12 @@
     "@swc/core@1.16.22": true,
     "@parcel/watcher@2.6.0": true,
     "nx@24.0.6": true
-  }
+  },
+  "trustedDependencies": [
+    "@parcel/watcher",
+    "@swc/core",
+    "esbuild",
+    "nx",
+    "protobufjs"
+  ]
 }
