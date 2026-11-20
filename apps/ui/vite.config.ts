@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import * as esbuild from 'esbuild';
-import { readFileSync } from 'fs';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin'
+import * as esbuild from 'esbuild'
+import { readFileSync } from 'fs'
 
 const extensions = [
   '.mjs',
@@ -16,17 +16,17 @@ const extensions = [
   '.js',
   '.css',
   '.json',
-];
+]
 
 const rollupPlugin = (matchers: RegExp[]) => ({
   name: 'js-in-jsx',
   load(id: string) {
     if (matchers.some((matcher) => matcher.test(id)) && id.endsWith('.js')) {
-      const file = readFileSync(id, { encoding: 'utf-8' });
-      return esbuild.transformSync(file, { loader: 'jsx', jsx: 'automatic' });
+      const file = readFileSync(id, { encoding: 'utf-8' })
+      return esbuild.transformSync(file, { loader: 'jsx', jsx: 'automatic' })
     }
   },
-});
+})
 
 export default defineConfig({
   root: __dirname,
@@ -47,7 +47,7 @@ export default defineConfig({
     reportCompressedSize: true,
     commonjsOptions: { transformMixedEsModules: true },
     outDir: '../../dist/apps/ui/web',
-    rollupOptions: {
+    rolldownOptions: {
       plugins: [rollupPlugin([/react-native-vector-icons/])],
     },
   },
@@ -75,4 +75,4 @@ export default defineConfig({
   // worker: {
   //  plugins: [ nxViteTsPaths() ],
   // },
-});
+})
