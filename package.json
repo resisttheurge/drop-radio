@@ -3,21 +3,33 @@
   "version": "0.0.0",
   "license": "SEE LICENSE IN LICENSE.md",
   "engines": {
+    "bun": ">=1.4.4",
     "node": ">=20.20.0"
   },
+  "packageManager": "bun@1.4.4",
   "devEngines": {
     "runtime": [
       {
+        "name": "bun",
+        "version": ">=1.4.4",
+        "onFail": "download"
+      },
+      {
         "name": "node",
         "version": ">=26.8.1",
-        "onFail": "download"
+        "onFail": "warn"
       }
     ],
     "packageManager": [
       {
+        "name": "bun",
+        "version": ">=1.4.4",
+        "onFail": "download"
+      },
+      {
         "name": "npm",
         "version": ">=11.9.0",
-        "onFail": "download"
+        "onFail": "warn"
       }
     ]
   },
@@ -145,5 +157,12 @@
     "@parcel/watcher@2.6.0": true,
     "nx@24.0.6": true,
     "protobufjs@7.2.5": true
-  }
+  },
+  "trustedDependencies": [
+    "@parcel/watcher",
+    "@swc/core",
+    "esbuild",
+    "nx",
+    "protobufjs"
+  ]
 }

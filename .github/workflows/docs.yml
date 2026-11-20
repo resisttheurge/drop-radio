@@ -18,18 +18,16 @@ jobs:
           fetch-depth: 0
 
       # Cache node_modules
-      - name: Setup Node.js and npm
-        uses: actions/setup-node@v6
-        with:
-          node-version: ^24.14.0
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2 
 
       # Install dependencies
-      - name:
-        run: npm ci --legacy-peer-deps
+      - name: Install dependencies
+        run: bun install
 
       # Generate documentation with TypeDoc
       - name: Generate docsite with TypeDoc
-        run: npx nx docs
+        run: bunx nx docs
 
       # Upload generated docsite as an artifact
       - name: Upload generated docsite artifact

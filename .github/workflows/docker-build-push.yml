@@ -24,15 +24,13 @@ jobs:
           fetch-tags: true
 
       # Cache node_modules
-      - name: Setup Node.js and npm
-        uses: actions/setup-node@v6
-        with:
-          node-version: ^24.14.0
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2 
 
-      - run: npm ci --legacy-peer-deps
+      - run: bun install
 
       - name: Build the ${{ inputs.app }} application
-        run: npx nx build ${{ inputs.app }}
+        run: bunx nx build ${{ inputs.app }}
 
       - name: Generate docker metadata
         id: meta
