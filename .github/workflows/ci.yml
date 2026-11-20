@@ -24,7 +24,8 @@ jobs:
 
       # Cache node_modules
       - uses: oven-sh/setup-bun@v2 
-
+      - run: bun install
+        
       - name: Get installed Playwright version
         id: playwright-version
         run: echo "PLAYWRIGHT_VERSION=$(bun info playwright version)" >> $GITHUB_ENV
@@ -36,7 +37,7 @@ jobs:
             ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.PLAYWRIGHT_VERSION }}
 
-      - run: bun install
+      
       - run: bunx playwright install
         if: steps.playwright-cache.outputs.cache-hit != 'true'
       - run: bunx playwright install-deps

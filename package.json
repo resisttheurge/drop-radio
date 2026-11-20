@@ -91,7 +91,7 @@
     "@nx/vitest": "24.0.6",
     "@nx/web": "24.0.6",
     "@nx/workspace": "24.0.6",
-    "@playwright/test": "^1.36.0",
+    "@playwright/test": "^1.65.1",
     "@react-native-community/cli": "18.0.1",
     "@react-native-community/cli-platform-android": "18.0.1",
     "@react-native-community/cli-platform-ios": "18.0.1",
