@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin'
 import * as esbuild from 'esbuild'
 import { readFileSync } from 'fs'
+import { nxReadySignal } from '@nx/vite/plugins/nx-ready-signal.plugin'
 
 const extensions = [
   '.mjs',
@@ -35,6 +35,7 @@ export default defineConfig({
     global: 'window',
   },
   resolve: {
+    tsconfigPaths: true,
     extensions,
     alias: {
       'react-native': 'react-native-web',
@@ -70,7 +71,7 @@ export default defineConfig({
       loader: { '.js': 'jsx' },
     },
   },
-  plugins: [react(), nxViteTsPaths()],
+  plugins: [react(), nxReadySignal()],
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [ nxViteTsPaths() ],

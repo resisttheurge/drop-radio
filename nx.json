@@ -80,6 +80,13 @@
       "options": {
         "testTargetName": "test"
       }
+    },
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "e2e"
+      },
+      "include": ["apps/server-e2e/**/*"]
     }
   ],
   "targetDefaults": {
@@ -100,5 +107,8 @@
       "inputs": ["production", "^production"]
     }
   },
-  "analytics": false
+  "analytics": false,
+  "affected": {
+    "legacy": true
+  }
 }
