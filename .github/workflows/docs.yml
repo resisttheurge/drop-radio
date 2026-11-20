@@ -12,17 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           filter: tree:0
           fetch-depth: 0
 
       # Cache node_modules
       - name: Setup Node.js and npm
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
-          cache: 'npm'
+          node-version: ^24.14.0
 
       # Install dependencies
       - name:

@@ -6,6 +6,7 @@ export async function createMetaPlaylistFile(
 ): Promise<void> {
   const content =
     'ffconcat version 1.0\n' +
-    `file '${playlistFile}'\noption safe 0\n`.repeat(2)
+    `file '${playlistFile}'\noption safe 0\n`.repeat(2) +
+    `file '${metaPlaylistFile}'\noption safe 0\n`
   await fs.writeFile(metaPlaylistFile, content)
 }
