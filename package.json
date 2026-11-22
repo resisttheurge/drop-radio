@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "license": "SEE LICENSE IN LICENSE.md",
   "engines": {
-    "bun": ">=1.4.4",
-    "node": ">=20.20.0"
+    "bun": "^1.4.4",
+    "node": "^26.8.1"
   },
   "packageManager": "bun@1.4.4",
   "devEngines": {
@@ -63,7 +63,6 @@
     "@fastify/cors": "^11.1.0",
     "@fastify/static": "^8.2.0",
     "@google-cloud/pino-logging-gcp-config": "^1.0.6",
-    "@js-temporal/polyfill": "^0.5.1",
     "axios": "^1.6.0",
     "fastify": "~5.8.2",
     "fastify-plugin": "~5.0.1",
@@ -103,8 +102,9 @@
     "@swc/helpers": "0.5.24",
     "@swc/jest": "0.2.39",
     "@testing-library/react-native": "13.2.2",
+    "@types/bun": "^1.4.4",
     "@types/jest": "30.0.0",
-    "@types/node": "^22.16.0",
+    "@types/node": "^26.6.6",
     "@types/react": "19.0.14",
     "@types/react-dom": "19.0.6",
     "@vitejs/plugin-react": "6.3.0",
@@ -141,7 +141,8 @@
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
     "typedoc": "^0.28.7",
-    "typescript": "6.0.3",
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "typescript-eslint": "8.73.0",
     "vite": "8.3.8",
     "vitest": "5.1.1"
