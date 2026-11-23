@@ -1,7 +1,6 @@
 import path from 'node:path'
 
 import staticPlugin from '@fastify/static'
-import { Temporal } from '@js-temporal/polyfill'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
 import {

@@ -11,18 +11,14 @@
     ],
     "targets": {
       "e2e": {
-        "executor": "@nx/jest:jest",
-        "outputs": [
-          "{projectRoot}/test-output/jest/coverage"
+        "dependsOn": [
+          "@drop-radio/server:docker:run"
         ],
         "options": {
-          "jestConfig": "apps/server-e2e/jest.config.ts",
           "passWithNoTests": true
-        },
-        "dependsOn": [
-          "@drop-radio/server:docker-run"
-        ]
+        }
       }
-    }
+    },
+    "// targets": "to see all targets run: nx show project @drop-radio/server-e2e --web"
   }
 }

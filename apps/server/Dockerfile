@@ -1,4 +1,4 @@
-FROM docker.io/node:lts-alpine
+FROM docker.io/node:26-alpine
 LABEL org.opencontainers.image.source="https://github.com/resisttheurge/drop-radio"
 LABEL org.opencontainers.image.description="Drop Radio Server Docker Image"
 

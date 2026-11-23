@@ -36,6 +36,7 @@ export default defineConfig({
     __DEV__: true,
   },
   resolve: {
+    tsconfigPaths: true,
     extensions,
     alias: {
       'react-native': 'react-native-web',
@@ -48,7 +49,7 @@ export default defineConfig({
     reportCompressedSize: true,
     commonjsOptions: { transformMixedEsModules: true },
     outDir: '../../dist/apps/ui/web',
-    rollupOptions: {
+    rolldownOptions: {
       plugins: [rollupPlugin([/react-native-vector-icons/])],
     },
   },
@@ -71,7 +72,7 @@ export default defineConfig({
       loader: { '.js': 'jsx' },
     },
   },
-  plugins: [react(), nxViteTsPaths()],
+  plugins: [react(), nxReadySignal()],
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [ nxViteTsPaths() ],
