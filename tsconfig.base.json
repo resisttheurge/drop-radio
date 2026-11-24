@@ -19,7 +19,6 @@
     "customConditions": ["@drop-radio/source"],
     "noUncheckedSideEffectImports": false,
     "types": ["*"],
-    "esModuleInterop": false,
     "ignoreDeprecations": "6.0"
   }
 }

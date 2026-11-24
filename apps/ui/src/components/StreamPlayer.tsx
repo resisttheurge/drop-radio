@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Animated, Easing, Pressable, StyleSheet } from 'react-native'
+import {
+  Animated,
+  Easing,
+  Pressable,
+  StyleSheet,
+  useColorScheme,
+} from 'react-native'
 import TrackPlayer, {
   Event,
   State,
@@ -9,8 +15,6 @@ import TrackPlayer, {
 /* eslint-disable-next-line */
 import { useRotation } from '../hooks/useRotation'
 import useTrackPlayer from '../hooks/useTrackPlayer'
-
-const icon = require('../assets/dc-man-icon.png')
 
 export enum StreamPlayerState {
   Init = 'init',
@@ -27,6 +31,14 @@ export interface StreamPlayerProps {
 export function StreamPlayer({
   streamUrl = 'https://server.drop-radio.info/stream/live.m3u8',
 }: StreamPlayerProps = {}) {
+  const colorScheme = useColorScheme()
+  const icon = useMemo(
+    () =>
+      colorScheme === 'dark'
+        ? require('../../assets/images/spinner_dark.png')
+        : require('../../assets/images/spinner_light.png'),
+    [colorScheme]
+  )
   const [trackPlayerState, setTrackPlayerState] = useState(State.None)
   const { initialized } = useTrackPlayer({
     url: streamUrl,
@@ -289,17 +301,7 @@ export function StreamPlayer({
   ])
 
   return (
-    <Animated.View
-      style={[
-        styles.container,
-        {
-          backgroundColor: backgroundColor.interpolate({
-            inputRange: [0, 1],
-            outputRange: ['rgba(255, 255, 255, 1)', 'rgba(119, 0, 0, 1)'],
-          }),
-        },
-      ]}
-    >
+    <Animated.View style={[styles.container, {}]}>
       <Pressable
         onPressIn={onPressIn}
         onLongPress={onLongPress}
@@ -324,10 +326,6 @@ export function StreamPlayer({
               opacity,
             },
           ]}
-          tintColor={backgroundColor.interpolate({
-            inputRange: [0, 1],
-            outputRange: ['rgba(0, 0, 0, 1)', 'rgba(255, 0, 0, 1)'],
-          })}
           source={icon}
         />
       </Pressable>
@@ -343,8 +341,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dcMan: {
-    width: 512,
-    height: 512,
+    flex: 1,
   },
 })
 

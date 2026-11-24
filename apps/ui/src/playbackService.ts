@@ -1,5 +1,6 @@
 import TrackPlayer, { Event } from 'react-native-track-player'
-export default async function () {
+
+export default async function playbackService() {
   TrackPlayer.addEventListener(Event.RemotePlay, () => {
     TrackPlayer.setVolume(1)
     TrackPlayer.play()
@@ -18,3 +19,4 @@ export default async function () {
     }
   })
 }
+

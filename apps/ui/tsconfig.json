@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "files": [],
-  "include": [],
+  "include": [".expo/types/**/*.ts", "app.config.ts", "expo-env.d.ts"],
   "references": [
     {
       "path": "./tsconfig.app.json"
