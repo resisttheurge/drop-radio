@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import * as esbuild from 'esbuild'
 import { readFileSync } from 'fs'
 import { defineConfig } from 'vite'
+import { nxReadySignal } from '@nx/vite/plugins/nx-ready-signal.plugin'
 
 const extensions = [
   '.mjs',

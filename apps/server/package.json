@@ -79,15 +79,15 @@
         "command": "{projectRoot}/copy-to-volume ${INPUT_DIRECTORY} drop-audio"
       },
       "docker:run": {
-        "options": {
-          "publish": "8080:80",
-          "volume": "drop-audio:/app/input"
-        },
         "continuous": true,
         "dependsOn": [
           "docker:volume",
           "docker:build"
-        ]
+        ],
+        "options": {
+          "publish": "8080:80",
+          "volume": "drop-audio:/app/input"
+        }
       }
     }
   }
