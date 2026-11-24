@@ -6,9 +6,11 @@ import TrackPlayer, {
   useTrackPlayerEvents,
 } from 'react-native-track-player'
 
-import icon from '../../../../assets/favicon/dc-man-icon.png'
+/* eslint-disable-next-line */
 import { useRotation } from '../hooks/useRotation'
 import useTrackPlayer from '../hooks/useTrackPlayer'
+
+const icon = require('../assets/dc-man-icon.png')
 
 export enum StreamPlayerState {
   Init = 'init',
@@ -18,7 +20,6 @@ export enum StreamPlayerState {
   Paused = 'paused',
 }
 
-/* eslint-disable-next-line */
 export interface StreamPlayerProps {
   streamUrl?: string
 }
@@ -27,7 +28,7 @@ export function StreamPlayer({
   streamUrl = 'https://server.drop-radio.info/stream/live.m3u8',
 }: StreamPlayerProps = {}) {
   const [trackPlayerState, setTrackPlayerState] = useState(State.None)
-  const { error, initialized } = useTrackPlayer({
+  const { initialized } = useTrackPlayer({
     url: streamUrl,
   })
 

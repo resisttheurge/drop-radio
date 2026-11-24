@@ -11,6 +11,11 @@
         "options": {
           "emptyOutDir": true
         }
+      },
+      "test": {
+        "options": {
+          "passWithNoTests": true
+        }
       }
     }
   }

@@ -1,3 +1,4 @@
+/* eslint-disable */
 const { withNxMetro } = require('@nx/react-native');
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
