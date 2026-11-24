@@ -25,7 +25,6 @@
         "backgroundImage": "./assets/images/adaptive-icon-android-bg.png",
         "monochromeImage": "./assets/images/monochrome-icon-android.png"
       },
-      "edgeToEdgeEnabled": true,
       "permissions": ["android.permission.MODIFY_AUDIO_SETTINGS"],
       "package": "info.drop_radio.ui"
     },

@@ -303,6 +303,9 @@ export function StreamPlayer({
   return (
     <Animated.View style={[styles.container, {}]}>
       <Pressable
+        disabled={
+          streamPlayerState !== 'paused' && streamPlayerState !== 'playing'
+        }
         onPressIn={onPressIn}
         onLongPress={onLongPress}
         onPressOut={onPressOut}
