@@ -17,6 +17,11 @@ jobs:
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
+      - name: Setup FFmpeg
+        uses: AnimMouse/setup-ffmpeg@v1
+        with:
+          version: 6.6
+
       - uses: actions/checkout@v6
         with:
           filter: tree:0
