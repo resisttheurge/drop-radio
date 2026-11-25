@@ -1,4 +1,4 @@
-import tsconfig from './tsconfig.json' with { type: 'json' }
+import tsconfig from './tsconfig.json' with { type: 'json' };
 
 const config = {
   name: 'Drop Radio Docs',
@@ -9,11 +9,12 @@ const config = {
   entryPointStrategy: 'packages',
   favicon: 'assets/favicon/favicon.ico',
   out: 'assets/generated-docs',
-  packageOptions: {
+  packageOptions: { 
     entryPoints: [
       'src/index.ts',
       'src/main.ts',
-      'src/main.tsx'
+      'src/main.tsx',
+      'src/app/index.tsx'
     ],
   },
 }

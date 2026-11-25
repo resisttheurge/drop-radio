@@ -131,4 +131,26 @@ assets/drop-audio/*
 # Local audio output directory
 assets/drop-stream/*
 !assets/drop-stream/.gitkeep
+.claude/worktrees
 .nx/polygraph
+.nx/self-healing
+.nx/migrate-runs
+.vitest
+
+.claude/settings.local.json
+
+# Expo
+node_modules/
+.expo/
+.yarn/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+cache/
+

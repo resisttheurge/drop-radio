@@ -1,9 +1,9 @@
-import { defineConfig, devices } from '@playwright/test';
-import { nxE2EPreset } from '@nx/playwright/preset';
-import { workspaceRoot } from '@nx/devkit';
+import { workspaceRoot } from '@nx/devkit'
+import { nxE2EPreset } from '@nx/playwright/preset'
+import { defineConfig, devices } from '@playwright/test'
 
 // For CI, you may want to set BASE_URL to the deployed application.
-const baseURL = process.env['BASE_URL'] || 'http://localhost:4300';
+const baseURL = process.env['BASE_URL'] || 'http://localhost:8080'
 
 /**
  * Read environment variables from file.
@@ -24,8 +24,8 @@ export default defineConfig({
   },
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npx nx run @drop-radio/ui:preview',
-    url: 'http://localhost:4300',
+    command: 'bunx nx serve ui',
+    url: 'http://localhost:8080',
     reuseExistingServer: true,
     cwd: workspaceRoot,
   },
@@ -65,4 +65,4 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     } */
   ],
-});
+})
